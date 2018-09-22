@@ -72,6 +72,29 @@ fn construct_json_with_macro() {
     assert_eq!("abcd", json["key2"]);
 }
 
+#[test]
+fn test_if_contains_key() {
+    let json = json!({
+        "key1": 1234,
+        "key2": "abcd" 
+    });
+    assert!(!json["key1"].is_null());
+    assert!(json["key3"].is_null());
+}
+
+#[test]
+fn add_to_array() {
+    let mut json = json!({
+        "arr": ["aaaa"]
+    });
+
+    let arr_ref = &mut json["arr"].as_array_mut().unwrap();
+    assert_eq!("aaaa", arr_ref[0]);
+    arr_ref.push(serde_json::Value::String("bbbb".to_string()));
+    assert_eq!("bbbb", arr_ref[1]);
+
+}
+
 fn try_from_str(data_str: &str) -> Result<serde_json::Value, serde_json::Error>{
     let v: serde_json::Value = serde_json::from_str(data_str)?;
     Ok(v)

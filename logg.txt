@@ -1,1 +1,1 @@
-{"some_category":{"entries":[{"body":"lala2332\n"}]}}
+{"cat1":{"entries":[{"body":"this is the body"},{"body":"sdsdsdds\n"}]},"cat2":{"entries":[{"body":"sdsdsdds\n"},{"body":"sdsdsddssdasdsaddas\n"}]}}
