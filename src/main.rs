@@ -27,7 +27,7 @@ fn main() -> std::io::Result<()> {
 	let file = OpenOptions::new()
 					.write(true)
 					.truncate(true)
-                    .open("logg.txt").expect("Open failed");
+                    .open("logg.txt").expect("Open for write failed");
     let mut file = BufWriter::new(file);
 
     file.write_all(json.to_string().as_bytes()).expect("Write failed");
@@ -38,8 +38,8 @@ fn main() -> std::io::Result<()> {
 
 fn get_file_contents_as_json() -> serde_json::Value {
 	let mut contents = String::new();
- 	get_file_contents(&mut contents).unwrap();
-    serde_json::from_str(&contents).unwrap()
+ 	get_file_contents(&mut contents).expect("Failed to get contents from file");
+    serde_json::from_str(&contents).expect("Failed to parse json from file")
 }
 
 fn get_file_contents(result: &mut String) -> Result<(), std::io::Error>  {
