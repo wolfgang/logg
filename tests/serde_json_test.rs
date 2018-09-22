@@ -58,7 +58,7 @@ fn can_propagate_error() {
 fn convert_json_to_string() {
     let json: serde_json::Value = serde_json::from_str(SIMPLE_VALID_JSON).unwrap();
     let json_string = json.to_string();
-    assert_eq!(SIMPLE_VALID_JSON, json_string);
+    assert_eq!(SIMPLE_VALID_JSON, json_string.trim());
 }
 
 fn try_from_str(data_str: &str) -> Result<serde_json::Value, serde_json::Error>{
