@@ -20,4 +20,9 @@ fn from_str_to_untyped() {
     assert_eq!(2, l[1]);
 }
 
+#[test]
+fn handles_errors() {
+    assert_eq!(1, 2);
+}
+
 
