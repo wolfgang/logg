@@ -16,28 +16,8 @@ fn main() -> std::io::Result<()> {
     init_file_if_needed();
 
     let mut json: serde_json::Value = get_file_contents_as_json();
-
-    let cat = &args[1];
-    let body = format!("{}\n", args[2]);
-
-    let new_entry: serde_json::Value = json!({"body": body});
-
-    if json[cat].is_null() {
-    	json[cat] = json!({"entries": [new_entry]});
-    }
-    else {
-    	let entries_ref = &mut json[cat]["entries"].as_array_mut().unwrap();
-    	entries_ref.push(new_entry);
-
-    }
-
-	let file = OpenOptions::new()
-					.write(true)
-					.truncate(true)
-                    .open(LOG_FILE).expect("Open for write failed");
-    let mut file = BufWriter::new(file);
-
-    file.write_all(json.to_string().as_bytes()).expect("Write failed");
+    add_entry_to_json(&mut json, &args);
+    write_back_json(&json);
 
     Ok(())
 
@@ -63,4 +43,30 @@ fn get_file_contents(result: &mut String)  {
     let mut file_for_read = BufReader::new(file_for_read);
 
  	file_for_read.read_to_string(result).expect("Read from file failed");
+}
+
+fn add_entry_to_json(json: &mut serde_json::Value, args: &Vec<String>) {
+	let cat = &args[1];
+    let body = format!("{}\n", args[2]);
+
+	let new_entry: serde_json::Value = json!({"body": body});
+
+    if json[cat].is_null() {
+    	json[cat] = json!({"entries": [new_entry]});
+    }
+    else {
+    	let entries_ref = &mut json[cat]["entries"].as_array_mut().unwrap();
+    	entries_ref.push(new_entry);
+    }
+}
+
+fn write_back_json(json: &serde_json::Value) {
+	let file = OpenOptions::new()
+					.write(true)
+					.truncate(true)
+                    .open(LOG_FILE).expect("Open for write failed");
+    let mut file = BufWriter::new(file);
+
+    file.write_all(json.to_string().as_bytes()).expect("Write failed");
+
 }
