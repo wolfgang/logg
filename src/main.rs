@@ -11,11 +11,7 @@ fn main() -> std::io::Result<()> {
     let cat = &args[1];
     let body = format!("{}\n", args[2]);
 
-    let mut contents = String::new();
- 	get_file_contents(&mut contents)?;
-
-
-    let mut json: serde_json::Value = serde_json::from_str(&contents).unwrap();
+    let mut json: serde_json::Value = get_file_contents_as_json();
 
     let new_entry: serde_json::Value = json!({"body": body});
 
@@ -40,6 +36,12 @@ fn main() -> std::io::Result<()> {
 
 }
 
+fn get_file_contents_as_json() -> serde_json::Value {
+	let mut contents = String::new();
+ 	get_file_contents(&mut contents).unwrap();
+    serde_json::from_str(&contents).unwrap()
+}
+
 fn get_file_contents(result: &mut String) -> Result<(), std::io::Error>  {
 	let file_for_read = OpenOptions::new()
 					.read(true)
@@ -48,5 +50,4 @@ fn get_file_contents(result: &mut String) -> Result<(), std::io::Error>  {
 
  	file_for_read.read_to_string(result)?;
  	Ok(())
-
 }
