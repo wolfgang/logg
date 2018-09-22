@@ -1,18 +1,19 @@
 
 use std::io::prelude::*;
-use std::io::BufWriter;
+use std::io::{BufWriter, BufReader};
 use std::fs::OpenOptions;
-use std::fs;
 use std::env;
 #[macro_use]
 extern crate serde_json;
 
 fn main() -> std::io::Result<()> {
 	let args: Vec<String> = env::args().collect();
- 	let contents = fs::read_to_string("logg.txt")?;
-
     let cat = &args[1];
     let body = format!("{}\n", args[2]);
+
+    let mut contents = String::new();
+ 	get_file_contents(&mut contents)?;
+
 
     let mut json: serde_json::Value = serde_json::from_str(&contents).unwrap();
 
@@ -36,5 +37,16 @@ fn main() -> std::io::Result<()> {
     file.write_all(json.to_string().as_bytes()).expect("Write failed");
 
     Ok(())
+
+}
+
+fn get_file_contents(result: &mut String) -> Result<(), std::io::Error>  {
+	let file_for_read = OpenOptions::new()
+					.read(true)
+                    .open("logg.txt").expect("Open for read failed");
+    let mut file_for_read = BufReader::new(file_for_read);
+
+ 	file_for_read.read_to_string(result)?;
+ 	Ok(())
 
 }
