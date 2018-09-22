@@ -1,0 +1,19 @@
+{
+	"some_category": {
+		entries: [{
+				"body": "this is the body"
+				"keywords": "keyword1 keywrod2"
+
+			}.
+			{...}
+		]
+	}
+	"some_other_category": {
+		entries: [{
+		...
+		},
+		{...}
+
+		]
+	}
+}
