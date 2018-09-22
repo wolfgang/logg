@@ -21,8 +21,22 @@ fn from_str_to_untyped() {
 }
 
 #[test]
-fn handles_errors() {
-    assert_eq!(1, 2);
+#[should_panic]
+fn panics_if_json_is_invalid() {
+    let data_str = "this is invalid json";
+
+    let _: serde_json::Value = serde_json::from_str(data_str).unwrap();
+
 }
 
+#[test]
+fn can_examine_error() {
+    let data_str = "this is invalid json";
+
+    serde_json::from_str(data_str).unwrap_or_else(|err| {
+        assert!(err.is_syntax());
+        assert_eq!(1, err.line());
+    });
+
+}
 
