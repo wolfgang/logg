@@ -19,17 +19,13 @@ fn main() -> std::io::Result<()> {
     let new_entry: serde_json::Value = json!({"body": body});
 
     if json[cat].is_null() {
-    	let new_cat = json!({
-    		"entries": [new_entry]
-    	});
-    	json[cat] = new_cat;
+    	json[cat] = json!({"entries": [new_entry]});
     }
     else {
-    	let cat_ref = &mut json[cat];
-    	cat_ref["entries"].as_array_mut().unwrap().push(new_entry);
+    	let entries_ref= &mut json[cat]["entries"].as_array_mut().unwrap();
+    	entries_ref.push(new_entry);
 
     }
-    println!("{:?}", json.to_string());
 
 	let file = OpenOptions::new()
 					.write(true)
