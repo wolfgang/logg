@@ -1,7 +1,7 @@
 
 use std::io::prelude::*;
-use std::io::{BufWriter, BufReader};
-use std::fs::{OpenOptions, File};
+use std::io::BufWriter;
+use std::fs::OpenOptions;
 use std::fs;
 use std::env;
 #[macro_use]
@@ -22,7 +22,7 @@ fn main() -> std::io::Result<()> {
     	json[cat] = json!({"entries": [new_entry]});
     }
     else {
-    	let entries_ref= &mut json[cat]["entries"].as_array_mut().unwrap();
+    	let entries_ref = &mut json[cat]["entries"].as_array_mut().unwrap();
     	entries_ref.push(new_entry);
 
     }
