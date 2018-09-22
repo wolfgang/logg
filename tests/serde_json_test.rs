@@ -1,3 +1,4 @@
+#[macro_use]
 extern crate serde_json;
 
 const INVALID_JSON: &'static str = "this is invalid json";
@@ -59,6 +60,16 @@ fn convert_json_to_string() {
     let json: serde_json::Value = serde_json::from_str(SIMPLE_VALID_JSON).unwrap();
     let json_string = json.to_string();
     assert_eq!(SIMPLE_VALID_JSON, json_string);
+}
+
+#[test]
+fn construct_json_with_macro() {
+    let json = json!({
+        "key1": 1234,
+        "key2": "abcd" 
+    });
+    assert_eq!(1234, json["key1"]);
+    assert_eq!("abcd", json["key2"]);
 }
 
 fn try_from_str(data_str: &str) -> Result<serde_json::Value, serde_json::Error>{
