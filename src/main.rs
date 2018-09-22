@@ -2,7 +2,6 @@ use std::io::prelude::*;
 use std::io::BufWriter;
 use std::fs::OpenOptions;
 use std::env;
-use std::fmt;
 
 fn main() -> std::io::Result<()> {
 	let args: Vec<String> = env::args().collect();
@@ -16,4 +15,12 @@ fn main() -> std::io::Result<()> {
 
     Ok(())
 
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
 }
