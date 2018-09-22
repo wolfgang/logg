@@ -10,17 +10,12 @@ const VALID_JSON: &'static str =
     }
     "#;
 
+const SIMPLE_VALID_JSON: &'static str = r#"{"key":1234}"#;
+
 
 #[test]
 fn from_str_to_untyped() {
-    let data_str = r#"{
-    	"some_str": "John",
-    	"some_int": 1234,
-    	"some_list": [1, 2]
-    }
-    "#;
-
-    let v: serde_json::Value = serde_json::from_str(data_str).unwrap();
+    let v: serde_json::Value = serde_json::from_str(VALID_JSON).unwrap();
     assert_eq!("John", v["some_str"]);
     assert_eq!(1234, v["some_int"]);
     assert_eq!(1, v["some_list"][0]);
@@ -57,6 +52,13 @@ fn can_propagate_error() {
     };
 
     assert_eq!("John", value["some_str"]);
+}
+
+#[test]
+fn convert_json_to_string() {
+    let json: serde_json::Value = serde_json::from_str(SIMPLE_VALID_JSON).unwrap();
+    let json_string = json.to_string();
+    assert_eq!(SIMPLE_VALID_JSON, json_string);
 }
 
 fn try_from_str(data_str: &str) -> Result<serde_json::Value, serde_json::Error>{
