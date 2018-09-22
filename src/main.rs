@@ -1,18 +1,23 @@
 
 use std::io::prelude::*;
 use std::io::{BufWriter, BufReader};
-use std::fs::OpenOptions;
+use std::fs::{OpenOptions, File};
 use std::env;
+use std::path::Path;
+
 #[macro_use]
 extern crate serde_json;
 
 fn main() -> std::io::Result<()> {
 	let args: Vec<String> = env::args().collect();
-    let cat = &args[1];
-    let body = format!("{}\n", args[2]);
+
+    init_file_if_needed();
 
     let mut json: serde_json::Value = get_file_contents_as_json();
 
+    let cat = &args[1];
+    let body = format!("{}\n", args[2]);
+    
     let new_entry: serde_json::Value = json!({"body": body});
 
     if json[cat].is_null() {
@@ -34,6 +39,13 @@ fn main() -> std::io::Result<()> {
 
     Ok(())
 
+}
+
+fn init_file_if_needed() {
+    if !Path::new("logg.txt").exists() {
+		let mut file = File::create("logg.txt").expect("Create file failed");
+		file.write_all(b"{}").expect("Init file failed");
+	}
 }
 
 fn get_file_contents_as_json() -> serde_json::Value {
