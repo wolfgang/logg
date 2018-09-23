@@ -12,7 +12,7 @@ pub(super) fn execute() {
 		println!("{:?}", cat_name);
 		let entries = &cat["entries"].as_array().unwrap();
 		for entry in entries.iter() {
-			println!("....{:?}", entry["body"].to_string());
+			println!("....{}", entry["body"].to_string());
 		}
 	}
 
