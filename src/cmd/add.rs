@@ -3,7 +3,6 @@ use std::io::{BufWriter, BufReader};
 use std::fs::{OpenOptions, File};
 use std::path::Path;
 use serde_json;
-use ::add_entry_to_json;
 
 pub (super) fn execute(args: &[String]) {
     init_file_if_needed();
@@ -13,7 +12,7 @@ pub (super) fn execute(args: &[String]) {
     let cat = &args[0];
     let body = &args[1];
 
-    add_entry_to_json(&mut json, cat, body);
+    ::core::json::add_entry_to_json(&mut json, cat, body);
     write_back_json(&json);
 }
 
