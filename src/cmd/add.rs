@@ -30,6 +30,6 @@ fn write_back_json(json: &serde_json::Value) {
                     .open(::core::LOG_FILE).expect("Open for write failed");
     let mut file = BufWriter::new(file);
 
-    file.write_all(json.to_string().as_bytes()).expect("Write failed");
+    file.write_all(serde_json::to_string_pretty(json).unwrap().as_bytes()).expect("Write failed");
 
 }
