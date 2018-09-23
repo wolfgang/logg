@@ -1,3 +1,5 @@
+pub mod cmd;
+
 #[macro_use]
 extern crate serde_json;
 
