@@ -1,5 +1,3 @@
-const LOG_FILE: &'static str = "logg.txt";
-
 pub mod add;
 pub mod list;
 
