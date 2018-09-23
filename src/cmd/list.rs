@@ -1,7 +1,6 @@
 use serde_json;
 
 pub(super) fn execute() {
-	println!("LISTING");
 	let json: serde_json::Value = ::core::io::get_file_contents_as_json();
 
 
