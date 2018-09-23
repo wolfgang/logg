@@ -7,7 +7,7 @@ use std::path::Path;
 use serde_json;
 use ::add_entry_to_json;
 
-pub fn execute(args: &Vec<String>) {
+pub (super) fn execute(args: &Vec<String>) {
     init_file_if_needed();
 
     let mut json: serde_json::Value = get_file_contents_as_json();
