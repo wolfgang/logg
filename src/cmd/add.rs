@@ -5,13 +5,13 @@ use std::path::Path;
 use serde_json;
 use ::add_entry_to_json;
 
-pub (super) fn execute(args: &Vec<String>) {
+pub (super) fn execute(args: &[String]) {
     init_file_if_needed();
 
     let mut json: serde_json::Value = get_file_contents_as_json();
 
-    let cat = &args[1];
-    let body = &args[2];
+    let cat = &args[0];
+    let body = &args[1];
 
     add_entry_to_json(&mut json, cat, body);
     write_back_json(&json);
