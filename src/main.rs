@@ -17,7 +17,6 @@ fn main() -> std::io::Result<()> {
 			println!("Invalid command: {}", args[1]);
 			process::exit(1);
 		}
-
 	}
 
     Ok(())
