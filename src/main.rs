@@ -16,7 +16,11 @@ fn main() -> std::io::Result<()> {
     init_file_if_needed();
 
     let mut json: serde_json::Value = get_file_contents_as_json();
-    add_entry_to_json(&mut json, &args);
+
+    let cat = &args[1];
+    let body = &args[2];
+
+    add_entry_to_json(&mut json, cat, body);
     write_back_json(&json);
 
     Ok(())
@@ -45,10 +49,7 @@ fn get_file_contents(result: &mut String)  {
  	file_for_read.read_to_string(result).expect("Read from file failed");
 }
 
-fn add_entry_to_json(json: &mut serde_json::Value, args: &Vec<String>) {
-	let cat = &args[1];
-    let body = format!("{}\n", args[2]);
-
+fn add_entry_to_json(json: &mut serde_json::Value, cat: &str, body: &str) {
 	let new_entry: serde_json::Value = json!({"body": body});
 
     if json[cat].is_null() {
