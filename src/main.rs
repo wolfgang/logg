@@ -5,8 +5,8 @@ use std::fs::{OpenOptions, File};
 use std::env;
 use std::path::Path;
 
-#[macro_use]
 extern crate serde_json;
+extern crate logg;
 
 const LOG_FILE: &'static str = "logg.txt";
 
@@ -20,7 +20,7 @@ fn main() -> std::io::Result<()> {
     let cat = &args[1];
     let body = &args[2];
 
-    add_entry_to_json(&mut json, cat, body);
+    logg::add_entry_to_json(&mut json, cat, body);
     write_back_json(&json);
 
     Ok(())
@@ -47,18 +47,6 @@ fn get_file_contents(result: &mut String)  {
     let mut file_for_read = BufReader::new(file_for_read);
 
  	file_for_read.read_to_string(result).expect("Read from file failed");
-}
-
-fn add_entry_to_json(json: &mut serde_json::Value, cat: &str, body: &str) {
-	let new_entry: serde_json::Value = json!({"body": body});
-
-    if json[cat].is_null() {
-    	json[cat] = json!({"entries": [new_entry]});
-    }
-    else {
-    	let entries_ref = &mut json[cat]["entries"].as_array_mut().unwrap();
-    	entries_ref.push(new_entry);
-    }
 }
 
 fn write_back_json(json: &serde_json::Value) {
