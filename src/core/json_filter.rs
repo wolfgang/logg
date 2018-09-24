@@ -1,5 +1,4 @@
 use serde_json;
-use std::collections::HashMap;
 
 pub struct SearchResult<'a> {
     pub category: String,
@@ -18,26 +17,28 @@ impl<'a> SearchResult<'a> {
 }
 
 
-pub fn by_body<'a>(_search_str: &str, json: &'a serde_json::Value) -> HashMap<String, Vec<&'a serde_json::Value>> {
-	let mut result = HashMap::new();
+pub fn by_body<'a>(_search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
 
 	let obj = json.as_object().unwrap();
+
+    let mut  search_results = Vec::new();
 
 	for cat_name in obj.keys() {
 		let cat = &obj[cat_name];
 		let entries = &cat["entries"];
-		let mut matching_entries = Vec::new();
 
-        let sr = SearchResult::new(cat_name.to_string());
+        let mut sr = SearchResult::new(cat_name.to_string());
 
 		for entry in entries.as_array().unwrap() {
-			matching_entries.push(entry);
+            sr.add(entry)
 		}
-		result.insert(cat_name.clone(), matching_entries);			
+
+        search_results.push(sr);
 
 
 	}
-	result
+    search_results
+	
 }
 
 
@@ -66,12 +67,18 @@ mod test {
 
 
     #[test]
-    fn return_full_input_if_search_is_empty_string() {
-    	// let json = json!({"cat1": {"entries": [{"body": "some body"}]}});
-    	// let result = by_body("", &json);
-    	// assert_eq!(1, result.len());
-    	// let s = String::from("cat1");
-    	// let entries = result.get(&s);
+    fn return_full_input_if_search_is_empty_string() {        
+    	let json = json!(
+            {
+                "cat1": {"entries": [{"body": "some body"}]}
+            });
+    	let results = by_body("", &json);
+    	assert_eq!(1, results.len());
+        let only_result = &results[0];
+        assert_eq!("cat1", only_result.category);
+        let matching_entries = &only_result.entries;
+        assert_eq!(1, matching_entries.len());
+        assert_eq!(&entry_with_body("some body"), matching_entries[0]);
 
     }
 
