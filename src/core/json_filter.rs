@@ -17,28 +17,25 @@ impl<'a> SearchResult<'a> {
 }
 
 
-pub fn by_body<'a>(_search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
-
+pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
 	let obj = json.as_object().unwrap();
-
     let mut  search_results = Vec::new();
 
 	for cat_name in obj.keys() {
-		let cat = &obj[cat_name];
-		let entries = &cat["entries"];
+		let entries = &obj[cat_name]["entries"];
 
-        let mut sr = SearchResult::new(cat_name.to_string());
+        let mut sr = SearchResult::new(cat_name.clone());
 
 		for entry in entries.as_array().unwrap() {
-            sr.add(entry)
+            let body = entry["body"].to_string();
+            if body.contains(search_str) {                
+                sr.add(entry)
+            }
 		}
 
         search_results.push(sr);
-
-
 	}
-    search_results
-	
+    search_results	
 }
 
 
@@ -85,6 +82,27 @@ mod test {
             &results, 1, "cat2", 
             vec!(&entry_with_body("some body 2"), &entry_with_body("some body 3")));
     }
+
+    #[test]
+    fn return_matching_entries_that_contain_given_word() {        
+        let json = json!(
+            {
+                "cat1": {"entries": [{"body": "body with word1"}]},
+                "cat2": {
+                    "entries": [
+                        {"body": "body with word2"},
+                        {"body": "another body with word1"}
+                ]}
+            });
+        let results = by_body("word1", &json);
+        assert_eq!(2, results.len());
+
+        assert_result(&results, 0, "cat1", 
+            vec!(&entry_with_body("body with word1")));
+        assert_result(&results, 1, "cat2",
+            vec!(&entry_with_body("another body with word1")));
+    }
+
 
     fn assert_result(
         results: &Vec<SearchResult>,
