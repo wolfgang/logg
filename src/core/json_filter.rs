@@ -70,21 +70,35 @@ mod test {
     fn return_full_input_if_search_is_empty_string() {        
     	let json = json!(
             {
-                "cat1": {"entries": [{"body": "some body"}]}
+                "cat1": {"entries": [{"body": "some body 1"}]},
+                "cat2": {
+                    "entries": [
+                        {"body": "some body 2"},
+                        {"body": "some body 3"}
+                ]}
             });
     	let results = by_body("", &json);
-    	assert_eq!(1, results.len());
-        let only_result = &results[0];
-        assert_eq!("cat1", only_result.category);
-        let matching_entries = &only_result.entries;
-        assert_eq!(1, matching_entries.len());
-        assert_eq!(&entry_with_body("some body"), matching_entries[0]);
+    	assert_eq!(2, results.len());
+
+        assert_result(&results, 0, "cat1", vec!(&entry_with_body("some body 1")));
+        assert_result(
+            &results, 1, "cat2", 
+            vec!(&entry_with_body("some body 2"), &entry_with_body("some body 3")));
+    }
+
+    fn assert_result(
+        results: &Vec<SearchResult>,
+        index: usize, 
+        category: &str, 
+        entries: Vec<&serde_json::Value>) {
+        assert_eq!(category, results[index].category);
+        let matching_entries = &results[index].entries;
+        assert_eq!(entries, *matching_entries);
 
     }
 
     fn entry_with_body(body: &str) -> serde_json::Value {
         json!({"body": body.to_string()})
     }
-
 
 }
