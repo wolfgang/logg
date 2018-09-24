@@ -17,7 +17,7 @@ pub fn by_category(cat: &str, json: &serde_json::Value) -> serde_json::Value {
 	serde_json::from_str(&json_str).unwrap()
 }
 
-pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> HashMap<&'a String, &'a serde_json::Value> {
+pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> HashMap<&'a String, Vec<&'a serde_json::Value>> {
 	let mut result = HashMap::new();
 
 	let obj = json.as_object().unwrap();
@@ -25,7 +25,11 @@ pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> HashMap<&'a
 	for cat_name in obj.keys() {
 		let cat = &obj[cat_name];
 		let entries = &cat["entries"];
-		result.insert(cat_name, entries);
+
+		for entry in entries.as_array().unwrap() {
+			result.insert(cat_name, vec!(entry));			
+		}
+
 
 	}
 	result
@@ -57,5 +61,14 @@ mod test {
     	let json_result = by_category("cat2", &json);
     	assert_eq!(expected_result, json_result);
     }
+
+    #[test]
+    fn return_full_input_if_search_is_empty_string() {
+    	let json = json!({"cat1": {"entries": [{"body": "some body"}]}});
+    	let result = by_body("", &json);
+    	assert_eq!(1, result.len());
+    	let entries = &result["cat1"];
+    }
+
 
 }
