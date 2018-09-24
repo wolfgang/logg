@@ -14,6 +14,10 @@ impl<'a> SearchResult<'a> {
         self.entries.push(entry);
     }
 
+    pub fn has_entries(&self) -> bool {
+        self.entries.len() > 0
+    }
+
 }
 
 
@@ -33,7 +37,9 @@ pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchR
             }
 		}
 
-        search_results.push(sr);
+        if sr.has_entries() {
+            search_results.push(sr);
+        }
 	}
     search_results	
 }
@@ -102,6 +108,19 @@ mod test {
         assert_result(&results, 1, "cat2",
             vec!(&entry_with_body("another body with word1")));
     }
+
+    #[test]
+    fn omit_categories_with_no_matching_entries() {        
+        let json = json!(
+            {
+                "cat1": {"entries": [{"body": "body with word1"}]},
+                "cat2": {"entries": [{"body": "body with word2"}]}
+            });
+        let results = by_body("word1", &json);
+        assert_eq!(1, results.len());
+        assert_result(&results, 0, "cat1", vec!(&entry_with_body("body with word1")));
+    }
+
 
 
     fn assert_result(
