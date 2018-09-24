@@ -1,4 +1,5 @@
 use serde_json;
+use std::collections::HashMap;
 
 pub fn by_category(cat: &str, json: &serde_json::Value) -> serde_json::Value {
 	let mut result = json!({});
@@ -14,6 +15,21 @@ pub fn by_category(cat: &str, json: &serde_json::Value) -> serde_json::Value {
 
 	let json_str =  result.to_string();
 	serde_json::from_str(&json_str).unwrap()
+}
+
+pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> HashMap<&'a String, &'a serde_json::Value> {
+	let mut result = HashMap::new();
+
+	let obj = json.as_object().unwrap();
+
+	for cat_name in obj.keys() {
+		let cat = &obj[cat_name];
+		let entries = &cat["entries"];
+		result.insert(cat_name, entries);
+
+	}
+	result
+
 }
 
 
