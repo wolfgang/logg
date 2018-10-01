@@ -12,14 +12,10 @@ pub fn add_entry_to_json(json: &mut serde_json::Value, cat: &str, body: &str) {
     }
 }
 
-pub fn get_body_lines(entry: &serde_json::Value) -> Vec<String> {
-	let body = entry["body"].to_string();
-	let lines = body.trim_matches('"').split("\\n");
-	let mut result:Vec<String> = Vec::new();
-	for line in lines {
-		result.push(String::from(line));
-	}
-	result
+pub fn get_body_lines(entry: &serde_json::Value) -> Vec<&str> {
+	let body = entry["body"].as_str().unwrap();
+	let lines = body.trim_matches('"').split('\n');
+	lines.collect()
 }
 
 #[cfg(test)]
