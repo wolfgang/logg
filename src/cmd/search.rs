@@ -7,8 +7,13 @@ pub(super) fn execute(search_str: &str) {
 	for result in results {
 		println!("{}", result.category);
 		for entry in result.entries {
-			println!("    {}", entry["body"].to_string());
+			let lines = ::core::json::get_body_lines(entry);
+			for line in lines {
+				println!("    {}", line);
+			}
 		}
+
+
 	}
 
 }
