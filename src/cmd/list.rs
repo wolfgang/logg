@@ -10,8 +10,7 @@ pub(super) fn execute() {
 		println!("{}", cat_name);
 		let entries = &cat["entries"].as_array().unwrap();
 		for entry in entries.iter() {
-			let body = entry["body"].to_string();
-			let lines = body.trim_matches('"').split("\\n");
+			let lines = ::core::json::get_body_lines(entry);
 			for line in lines {
 				println!("    {}", line);
 			}
