@@ -25,7 +25,9 @@ fn get_body(args: &[String]) -> String {
     }
     else {
         let file_name = "/tmp/logg_tmp.txt";
-        fs::remove_file(file_name).expect("Failed to remove temp file");
+        if Path::new(file_name).exists() {
+            fs::remove_file(file_name).expect("Failed to remove temp file");
+        }
         let editor = env::var("EDITOR").expect("EDITOR variable is not set");
         let status = Command::new(editor)
             .arg(file_name)
