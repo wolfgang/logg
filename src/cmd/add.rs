@@ -9,11 +9,15 @@ pub (super) fn execute(args: &[String]) {
 
     let mut json: serde_json::Value = ::core::io::get_file_contents_as_json();
 
-    let cat = &args[0];
-    let body = &args[1];
+    let cat = args[0].clone();
+    let body = get_body(args);
 
-    ::core::json::add_entry_to_json(&mut json, cat, body);
+    ::core::json::add_entry_to_json(&mut json, &cat, &body);
     write_back_json(&json);
+}
+
+fn get_body(args: &[String]) -> String {
+    args[1].clone()
 }
 
 fn init_file_if_needed() {
