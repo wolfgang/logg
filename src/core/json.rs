@@ -12,6 +12,16 @@ pub fn add_entry_to_json(json: &mut serde_json::Value, cat: &str, body: &str) {
     }
 }
 
+pub fn get_body_lines(entry: &serde_json::Value) -> Vec<String> {
+	let body = entry["body"].to_string();
+	let lines = body.trim_matches('"').split("\\n");
+	let mut result:Vec<String> = Vec::new();
+	for line in lines {
+		result.push(String::from(line));
+	}
+	result
+}
+
 #[cfg(test)]
 mod test {
 	use super::*;
@@ -44,9 +54,10 @@ mod test {
 					"entries": [{"body": "body_1"}, {"body": "body_2"}]}
 			}),
 			json);
-
-	}    
-
-
-
+	}
+	#[test]
+	fn get_body_lines_returns_vector_of_lines() {
+		let entry = json!({"body": "line1\nline2"});
+		assert_eq!(vec!("line1", "line2"), get_body_lines(&entry));
+	}
 }
