@@ -3,22 +3,33 @@ use std::env;
 use std::process::Command;
 use std::path::Path;
 
+const EDITOR_FILE: &'static str = "/tmp/logg_tmp.txt";
 
 pub fn get_contents() -> String {
-    let file_name = "/tmp/logg_tmp.txt";
-        if Path::new(file_name).exists() {
-            fs::remove_file(file_name).expect("Failed to remove temp file");
-        }
-        let editor = env::var("EDITOR").expect("EDITOR variable is not set");
-        let status = Command::new(editor)
-            .arg(file_name)
-            .status()
-            .expect("Failed to execute editor");
-
-        println!("vi exited with: {}", status);
-        let contents = fs::read_to_string(file_name).expect("Failed to read file contents");
-        println!("edited file contents: {}", contents);
-        contents
+    prepare_editor_file();
+    edit_file();
+    get_editor_file_contents()
 }
 
-        
+fn prepare_editor_file() {
+    if Path::new(EDITOR_FILE).exists() {
+        fs::remove_file(EDITOR_FILE).expect("Failed to remove temp file");
+    }
+
+}
+
+fn edit_file() {
+    let editor = env::var("EDITOR").expect("EDITOR variable is not set");
+    let status = Command::new(editor)
+        .arg(EDITOR_FILE)
+        .status()
+        .expect("Failed to execute editor");
+
+    println!("editor exited with: {}", status);
+}
+
+fn get_editor_file_contents() -> String {
+    let contents = fs::read_to_string(EDITOR_FILE).expect("Failed to read file contents");
+    println!("edited file contents: {}", contents);
+    contents
+}
