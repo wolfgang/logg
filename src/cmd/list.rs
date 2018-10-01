@@ -11,7 +11,7 @@ pub(super) fn execute() {
 		let entries = &cat["entries"].as_array().unwrap();
 		for entry in entries.iter() {
 			let body = entry["body"].to_string();
-			let lines = body.split("\\n");
+			let lines = body.trim_matches('"').split("\\n");
 			for line in lines {
 				println!("    {}", line);
 			}
