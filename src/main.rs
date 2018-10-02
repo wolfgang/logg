@@ -13,7 +13,7 @@ fn main() -> std::io::Result<()> {
 	match cmd as &str {
 		"a" => cmd::add(&args[2..]),
 		"f" => cmd::search(&args),
-		"show" => cmd::show(),
+		"show" => cmd::show(&args),
 		_ => {
 			println!("Invalid command: {}", args[1]);
 			process::exit(1);

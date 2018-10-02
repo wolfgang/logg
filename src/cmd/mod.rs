@@ -10,6 +10,6 @@ pub fn search(args: &[String]) {
 	search::execute(args)
 }
 
-pub fn show() {
+pub fn show(args: &[String]) {
 	show::execute()
 }
