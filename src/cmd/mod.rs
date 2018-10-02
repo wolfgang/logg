@@ -11,5 +11,5 @@ pub fn search(args: &[String]) {
 }
 
 pub fn show(args: &[String]) {
-	show::execute()
+	show::execute(args)
 }

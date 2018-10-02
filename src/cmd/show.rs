@@ -5,6 +5,22 @@ pub(super) fn execute(args: &[String]) {
 	let json: serde_json::Value = ::core::io::get_file_contents_as_json();
 	let results = ::core::json_filter::by_body("", &json);
 	for result in results {
-		println!("> {} ({})", result.category, result.entries.len());
+		if args.len()==2 {
+			println!("> {} ({})", result.category, result.entries.len());
+		}
+		else {
+			let cat = &args[2];
+			if cat == &result.category {
+				println!("> {}", cat);
+				let mut index = 0;
+				for entry in result.entries {
+					let body_as_str =  ::core::json::get_body_as_str(&entry);
+					let lines: Vec<&str> = body_as_str.lines().collect();
+					let more = if lines.len() > 1 { "[...]" } else { "" };
+					println!("[{}] {} {}", index, lines[0], more);
+					index = index + 1;
+				}
+			}
+		}
 	}
 }
