@@ -164,7 +164,7 @@ mod test {
     fn assert_result(result: &SearchResult, category: &str, entries: Vec<&serde_json::Value>) {
         assert_eq!(category, result.category);
         let matching_entries = &result.entries;
-        assert_eq!(entries, *matching_entries);
+        assert_eq!(entries, matching_entries);
 
     }
 
