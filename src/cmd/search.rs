@@ -1,7 +1,8 @@
 use serde_json;
 
 
-pub(super) fn execute(search_str: &str) {
+pub(super) fn execute(args: &[String]) {
+	let search_str = get_search_string(args);
 	let json: serde_json::Value = ::core::io::get_file_contents_as_json();
 	let results = ::core::json_filter::by_body(search_str, &json);
 	for result in results {
@@ -12,5 +13,13 @@ pub(super) fn execute(search_str: &str) {
 
 
 	}
+}
 
+fn get_search_string(args: &[String]) -> &str {
+	if args.len() == 3 {
+		&args[2]
+	}
+	else {
+		""
+	}
 }

@@ -5,6 +5,6 @@ pub fn add(args: &[String]) {
 	add::execute(args);
 }
 
-pub fn search(search_str: &str) {
-	search::execute(search_str)
+pub fn search(args: &[String]) {
+	search::execute(args)
 }
