@@ -72,8 +72,8 @@ mod test {
             });
         let result1 = by_cateogry("cat1", &json);
         let result2= by_cateogry("cat2", &json);
-        assert_result_in(&vec!(result1), 0, "cat1", vec!(&entry_with_body("body with word1")));
-        assert_result_in(&vec!(result2), 0, "cat2", vec!(&entry_with_body("body with word2")));
+        assert_result(&result1, "cat1", vec!(&entry_with_body("body with word1")));
+        assert_result(&result2, "cat2", vec!(&entry_with_body("body with word2")));
     }
 
     #[test]
@@ -157,16 +157,17 @@ mod test {
 
 
 
-    fn assert_result_in(
-        results: &Vec<SearchResult>,
-        index: usize, 
-        category: &str, 
-        entries: Vec<&serde_json::Value>) {
-        assert_eq!(category, results[index].category);
-        let matching_entries = &results[index].entries;
+    fn assert_result_in(results: &Vec<SearchResult>, index: usize, category: &str,  entries: Vec<&serde_json::Value>) {
+        assert_result(&results[index], category, entries);
+    }
+
+    fn assert_result(result: &SearchResult, category: &str, entries: Vec<&serde_json::Value>) {
+        assert_eq!(category, result.category);
+        let matching_entries = &result.entries;
         assert_eq!(entries, *matching_entries);
 
     }
+
 
     fn entry_with_body(body: &str) -> serde_json::Value {
         json!({"body": body.to_string()})
