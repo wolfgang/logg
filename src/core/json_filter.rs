@@ -72,8 +72,8 @@ mod test {
             });
         let result1 = by_cateogry("cat1", &json);
         let result2= by_cateogry("cat2", &json);
-        assert_result(&vec!(result1), 0, "cat1", vec!(&entry_with_body("body with word1")));
-        assert_result(&vec!(result2), 0, "cat2", vec!(&entry_with_body("body with word2")));
+        assert_result_in(&vec!(result1), 0, "cat1", vec!(&entry_with_body("body with word1")));
+        assert_result_in(&vec!(result2), 0, "cat2", vec!(&entry_with_body("body with word2")));
     }
 
     #[test]
@@ -110,8 +110,8 @@ mod test {
     	let results = by_body("", &json);
     	assert_eq!(2, results.len());
 
-        assert_result(&results, 0, "cat1", vec!(&entry_with_body("some body 1")));
-        assert_result(
+        assert_result_in(&results, 0, "cat1", vec!(&entry_with_body("some body 1")));
+        assert_result_in(
             &results, 1, "cat2", 
             vec!(&entry_with_body("some body 2"), &entry_with_body("some body 3")));
     }
@@ -130,9 +130,9 @@ mod test {
         let results = by_body("word1", &json);
         assert_eq!(2, results.len());
 
-        assert_result(&results, 0, "cat1", 
+        assert_result_in(&results, 0, "cat1", 
             vec!(&entry_with_body("body with word1")));
-        assert_result(&results, 1, "cat2",
+        assert_result_in(&results, 1, "cat2",
             vec!(&entry_with_body("another body with word1")));
     }
 
@@ -145,7 +145,7 @@ mod test {
             });
         let results = by_body("word1", &json);
         assert_eq!(1, results.len());
-        assert_result(&results, 0, "cat1", vec!(&entry_with_body("body with word1")));
+        assert_result_in(&results, 0, "cat1", vec!(&entry_with_body("body with word1")));
     }
 
     #[test]
@@ -157,7 +157,7 @@ mod test {
 
 
 
-    fn assert_result(
+    fn assert_result_in(
         results: &Vec<SearchResult>,
         index: usize, 
         category: &str, 
