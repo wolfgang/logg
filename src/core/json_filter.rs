@@ -155,17 +155,19 @@ mod test {
         assert_eq!(1, results.len());
     }
 
-
-
-    fn assert_result_in(results: &Vec<SearchResult>, index: usize, category: &str,  entries: Vec<&serde_json::Value>) {
+    fn assert_result_in(
+        results: &Vec<SearchResult>, 
+        index: usize, 
+        category: &str, 
+        entries: Vec<&serde_json::Value>) 
+    {
         assert_result(&results[index], category, entries);
     }
 
     fn assert_result(result: &SearchResult, category: &str, entries: Vec<&serde_json::Value>) {
         assert_eq!(category, result.category);
         let matching_entries = &result.entries;
-        assert_eq!(entries, matching_entries);
-
+        assert_eq!(&entries, matching_entries);
     }
 
 
