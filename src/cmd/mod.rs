@@ -1,5 +1,6 @@
 pub mod add;
 pub mod search;
+pub mod show;
 
 pub fn add(args: &[String]) {
 	add::execute(args);
@@ -7,4 +8,8 @@ pub fn add(args: &[String]) {
 
 pub fn search(args: &[String]) {
 	search::execute(args)
+}
+
+pub fn show() {
+	show::execute()
 }
