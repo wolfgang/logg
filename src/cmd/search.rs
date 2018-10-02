@@ -10,8 +10,6 @@ pub(super) fn execute(args: &[String]) {
 		for entry in result.entries {
 			println!("{}\n-----", ::core::json::get_body_as_str(&entry));
 		}
-
-
 	}
 }
 
