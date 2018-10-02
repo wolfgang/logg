@@ -31,5 +31,5 @@ fn edit_file() {
 fn get_editor_file_contents() -> String {
     let contents = fs::read_to_string(EDITOR_FILE).expect("Failed to read file contents");
     println!("edited file contents: {}", contents);
-    contents
+    String::from(contents.trim_right())
 }
