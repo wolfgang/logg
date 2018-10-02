@@ -24,15 +24,15 @@ impl<'a> SearchResult<'a> {
 pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
 	let obj = json.as_object().unwrap();
     let mut  search_results = Vec::new();
+    let search_str_lowercase = search_str.to_lowercase();
 
 	for cat_name in obj.keys() {
 		let entries = &obj[cat_name]["entries"];
-
         let mut sr = SearchResult::new(cat_name.clone());
 
 		for entry in entries.as_array().unwrap() {
-            let body = entry["body"].to_string();
-            if body.contains(search_str) {                
+            let body = entry["body"].as_str().unwrap().to_lowercase();
+            if body.contains(&search_str_lowercase) {                
                 sr.add(entry)
             }
 		}
@@ -119,6 +119,13 @@ mod test {
         let results = by_body("word1", &json);
         assert_eq!(1, results.len());
         assert_result(&results, 0, "cat1", vec!(&entry_with_body("body with word1")));
+    }
+
+    #[test]
+    fn search_is_case_insensitive() {
+        let json = json!({"cat1": {"entries": [{"body": "some body"}]}});
+        let results = by_body("SoMe", &json);
+        assert_eq!(1, results.len());
     }
 
 
