@@ -44,11 +44,38 @@ pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchR
     search_results	
 }
 
+pub fn by_cateogry<'a>(category: &str, json: &'a serde_json::Value) -> SearchResult<'a> {
+    let mut result = SearchResult::new(String::from(category));
+    let obj = json.as_object().unwrap();
+
+    let entries = &obj[category]["entries"];
+    for entry in entries.as_array().unwrap() {
+        result.add(entry)
+    }
+
+    result
+}
+
 
 
 #[cfg(test)]
 mod test {
 	use super::*;
+
+
+    #[test]
+    fn by_category_returns_category() {
+        let json = json!(
+            {
+                "cat1": {"entries": [{"body": "body with word1"}]},
+                "cat2": {"entries": [{"body": "body with word2"}]}
+            });
+        let result1 = by_cateogry("cat1", &json);
+        let result2= by_cateogry("cat2", &json);
+        assert_result(&vec!(result1), 0, "cat1", vec!(&entry_with_body("body with word1")));
+        assert_result(&vec!(result2), 0, "cat2", vec!(&entry_with_body("body with word2")));
+    }
+
     #[test]
     fn search_result_construction() {
         let sr = SearchResult::new(String::from("some_category"));
