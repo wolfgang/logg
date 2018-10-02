@@ -7,13 +7,10 @@ pub(super) fn execute() {
 
 	for cat_name in obj.keys() {
 		let cat = &obj[cat_name];
-		println!("{}", cat_name);
+		println!("{}\n---", cat_name);
 		let entries = &cat["entries"].as_array().unwrap();
 		for entry in entries.iter() {
-			let lines = ::core::json::get_body_lines(entry);
-			for line in lines {
-				println!("    {}", line);
-			}
+			println!("{}", ::core::json::get_body_as_str(&entry));
 		}
 	}
 

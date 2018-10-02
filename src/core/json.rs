@@ -18,6 +18,11 @@ pub fn get_body_lines(entry: &serde_json::Value) -> Vec<&str> {
 	lines.collect()
 }
 
+pub fn get_body_as_str(entry: &serde_json::Value) -> &str {
+	entry["body"].as_str().unwrap()
+}
+
+
 #[cfg(test)]
 mod test {
 	use super::*;
@@ -56,4 +61,10 @@ mod test {
 		let entry = json!({"body": "line1\nline2"});
 		assert_eq!(vec!("line1", "line2"), get_body_lines(&entry));
 	}
+	#[test]
+	fn get_body_as_str_returns_string_in_entry_body() {
+		let entry = json!({"body": "line1\nline2"});
+		assert_eq!("line1\nline2", get_body_as_str(&entry));
+	}
+
 }
