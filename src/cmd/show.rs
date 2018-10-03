@@ -15,15 +15,7 @@ pub(super) fn execute(args: &[String]) {
 		println!("> {}[{}]\n----------\n{}", cat, index, body_as_str);					
 	}
 	else {
-		println!("> {}", cat);
-		let mut index = 0;
-		for entry in result.entries {
-			let body_as_str =  ::core::json::get_body_as_str(&entry);
-			let lines: Vec<&str> = body_as_str.lines().collect();
-			let more = if lines.len() > 1 { "[...]" } else { "" };
-			println!("[{}] {} {}", index, lines[0], more);
-			index = index + 1;
-		}
+		show_toc_for_search_result(&result);
 	}
 }
 
@@ -31,5 +23,17 @@ fn show_all(json: &serde_json::Value) {
 	let results = ::core::json_filter::by_body("", json);
 	for result in results {
 		println!("> {} ({})", result.category, result.entries.len());
+	}
+}
+
+fn show_toc_for_search_result(result: &::core::json_filter::SearchResult) {
+	println!("> {}", result.category);
+	let mut index = 0;
+	for entry in &result.entries {
+		let body_as_str =  ::core::json::get_body_as_str(&entry);
+		let lines: Vec<&str> = body_as_str.lines().collect();
+		let more = if lines.len() > 1 { "[...]" } else { "" };
+		println!("[{}] {} {}", index, lines[0], more);
+		index = index + 1;
 	}
 }
