@@ -12,7 +12,7 @@ pub fn show_toc_for_search_result(result: &json_filter::SearchResult) {
 	println!("> {}", result.category);
 	for entry in &result.entries {
 		let body_as_str =  json::get_body_as_str(&entry);
-		let id = entry["id"].as_u64().unwrap();
+		let id = json::get_id(&entry);
 		let lines: Vec<&str> = body_as_str.lines().collect();
 		let more = if lines.len() > 1 { "[...]" } else { "" };
 		println!("[{}] {} {}", id, lines[0], more);
