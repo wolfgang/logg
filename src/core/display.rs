@@ -1,4 +1,12 @@
+use serde_json;
 use ::core::{json, json_filter};
+
+pub fn show_toc(json: &serde_json::Value) {
+	let results = json_filter::by_body("", json);
+	for result in results {
+		println!("> {} ({})", result.category, result.entries.len());
+	}
+}
 
 pub fn show_toc_for_search_result(result: &json_filter::SearchResult) {
 	println!("> {}", result.category);
