@@ -15,12 +15,6 @@ fn new_entry(body: &str, id: usize) -> serde_json::Value {
 	json!({"body": body, "id": id})
 } 
 
-pub fn get_body_lines(entry: &serde_json::Value) -> Vec<&str> {
-	let body = entry["body"].as_str().unwrap();
-	let lines = body.trim_matches('"').split('\n');
-	lines.collect()
-}
-
 pub fn get_body_as_str(entry: &serde_json::Value) -> &str {
 	entry["body"].as_str().unwrap()
 }
@@ -58,11 +52,6 @@ mod test {
 					"entries": [{"body": "body_1", "id": 0}, {"body": "body_2", "id": 1}]}
 			}),
 			json);
-	}
-	#[test]
-	fn get_body_lines_returns_vector_of_lines() {
-		let entry = json!({"body": "line1\nline2"});
-		assert_eq!(vec!("line1", "line2"), get_body_lines(&entry));
 	}
 	#[test]
 	fn get_body_as_str_returns_string_in_entry_body() {
