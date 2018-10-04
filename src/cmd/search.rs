@@ -1,10 +1,20 @@
 use serde_json;
-use ::core::{io, json_filter, display};
+use ::core::{io, json_entry, json_filter, display};
 
 pub(super) fn execute(args: &[String]) {
 	let search_str = get_search_string(args);
 	let json: serde_json::Value = io::get_file_contents_as_json();
 	let results = json_filter::by_body(search_str, &json);
+
+	if results.len()==1 {
+		let result = &results[0];
+		if result.entries.len()==1 {
+			let entry = &result.entries[0];
+			let id = json_entry::get_id(entry) as usize;
+			return display::show_entry_for_search_result(result, id);
+		}
+	}
+
 	for result in results {
 		display::show_toc_for_search_result(&result);
 	}
