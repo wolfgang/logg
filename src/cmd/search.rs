@@ -1,5 +1,5 @@
 use serde_json;
-use ::core::{io, json_entry, json_filter, display};
+use ::core::{io, json_filter, display};
 
 pub(super) fn execute(args: &[String]) {
 	let search_str = get_search_string(args);
@@ -7,9 +7,7 @@ pub(super) fn execute(args: &[String]) {
 	let results = json_filter::by_body(search_str, &json);
 
 	if results.len()==1 && results[0].is_unqiue() {
-		let result = &results[0];
-		let entry = &result.entries[0];
-		return display::show_entry_for_search_result(result, 0);
+		return display::show_entry_for_search_result(&results[0], 0);
 	}
 
 	for result in results {

@@ -20,6 +20,8 @@ pub fn show_toc_for_search_result(result: &json_filter::SearchResult) {
 }
 
 pub fn show_entry_for_search_result(result: &json_filter::SearchResult, index: usize) {
-		let body_as_str =  json_entry::get_body_as_str(result.entries[index]);
-		println!("> {}[{}]\n----------\n{}", result.category, index, body_as_str);					
+	let entry = &result.entries[index];
+	let body_as_str =  json_entry::get_body_as_str(entry);
+	let id = json_entry::get_id(&entry);
+	println!("> {} [{}]\n----------\n{}", result.category, id, body_as_str);					
 }
