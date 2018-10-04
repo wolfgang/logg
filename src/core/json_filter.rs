@@ -18,6 +18,10 @@ impl<'a> SearchResult<'a> {
         self.entries.len() > 0
     }
 
+    pub fn is_unqiue(&self) -> bool {
+        return self.entries.len() == 1;
+    }
+
 }
 
 
@@ -102,6 +106,8 @@ mod test {
         let mut sr = SearchResult::new(String::from("some_category"));
         sr.add(&entry1);
         assert!(sr.is_unqiue());
+        sr.add(&entry2);
+        assert!(!sr.is_unqiue());
 
     }
 
