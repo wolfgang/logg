@@ -10,8 +10,7 @@ pub(super) fn execute(args: &[String]) {
 		let result = &results[0];
 		if result.entries.len()==1 {
 			let entry = &result.entries[0];
-			let id = json_entry::get_id(entry) as usize;
-			return display::show_entry_for_search_result(result, id);
+			return display::show_entry_for_search_result(result, 0);
 		}
 	}
 
