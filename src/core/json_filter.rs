@@ -95,6 +95,16 @@ mod test {
         assert_eq!(&entry2, sr.entries[1]);
     }
 
+    #[test]
+    fn search_result_is_unique() {
+        let entry1 = entry_with_body("some_body_1");
+        let entry2 = entry_with_body("some_body_2");
+        let mut sr = SearchResult::new(String::from("some_category"));
+        sr.add(&entry1);
+        assert!(sr.is_unqiue());
+
+    }
+
 
     #[test]
     fn return_full_input_if_search_is_empty_string() {        
