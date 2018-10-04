@@ -2,6 +2,9 @@ use serde_json;
 use colored::*;
 use ::core::{json_entry, json_filter};
 
+const LINE: &'static str = "-------------------------------------------------------------------------------";
+
+
 pub fn show_toc(json: &serde_json::Value) {
 	let results = json_filter::by_body("", json);
 	for result in results {
@@ -24,7 +27,7 @@ pub fn show_entry_for_search_result(result: &json_filter::SearchResult, index: u
 	let entry = &result.entries[index];
 	let body_as_str =  json_entry::get_body_as_str(entry);
 	let id = json_entry::get_id(&entry);
-	println!("{} {}\n----------\n{}", result.category.dimmed(), pretty_id(id), body_as_str);					
+	println!("{} {}\n{}\n{}\n{}", result.category.dimmed(), pretty_id(id), LINE, body_as_str, LINE);					
 }
 
 fn pretty_count(count: usize) -> ColoredString {
