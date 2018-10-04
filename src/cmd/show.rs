@@ -1,5 +1,5 @@
 use serde_json;
-use ::core::{io, json_entry, json_filter, display};
+use ::core::{io, json_filter, display};
 
 pub(super) fn execute(args: &[String]) {
 	let json: serde_json::Value = io::get_file_contents_as_json();
@@ -11,8 +11,7 @@ pub(super) fn execute(args: &[String]) {
 	let result = json_filter::by_category(cat, &json);
 	if args.len()==4 {
 		let index = args[3].parse::<usize>().unwrap();
-		let body_as_str =  json_entry::get_body_as_str(result.entries[index]);
-		println!("> {}[{}]\n----------\n{}", cat, index, body_as_str);					
+		display::show_entry_for_search_result(&result, index);
 	}
 	else {
 		display::show_toc_for_search_result(&result);

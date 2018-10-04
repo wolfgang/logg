@@ -18,3 +18,8 @@ pub fn show_toc_for_search_result(result: &json_filter::SearchResult) {
 		println!("[{}] {} {}", id, lines[0], more);
 	}
 }
+
+pub fn show_entry_for_search_result(result: &json_filter::SearchResult, index: usize) {
+		let body_as_str =  json_entry::get_body_as_str(result.entries[index]);
+		println!("> {}[{}]\n----------\n{}", result.category, index, body_as_str);					
+}
