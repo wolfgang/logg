@@ -1,4 +1,3 @@
-
 extern crate logg;
 
 use std::env;
