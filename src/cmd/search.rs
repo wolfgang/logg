@@ -6,12 +6,10 @@ pub(super) fn execute(args: &[String]) {
 	let json: serde_json::Value = io::get_file_contents_as_json();
 	let results = json_filter::by_body(search_str, &json);
 
-	if results.len()==1 {
+	if results.len()==1 && results[0].is_unqiue() {
 		let result = &results[0];
-		if result.entries.len()==1 {
-			let entry = &result.entries[0];
-			return display::show_entry_for_search_result(result, 0);
-		}
+		let entry = &result.entries[0];
+		return display::show_entry_for_search_result(result, 0);
 	}
 
 	for result in results {
