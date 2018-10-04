@@ -18,7 +18,7 @@ pub fn show_toc_for_search_result(result: &json_filter::SearchResult) {
 		let body_as_str =  json_entry::get_body_as_str(&entry);
 		let id = json_entry::get_id(&entry);
 		let lines: Vec<&str> = body_as_str.lines().collect();
-		let more = if lines.len() > 1 { "[...]" } else { "" };
+		let more = if lines.len() > 1 { "[...]".yellow() } else { "".yellow() };
 		println!("{} {} {}", pretty_id(id), lines[0], more);
 	}
 }
