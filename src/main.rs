@@ -1,10 +1,16 @@
 extern crate logg;
+extern crate chrono;
 
 use std::env;
 use std::process;
 use logg::cmd;
+use chrono::prelude::*;
+
 
 fn main() -> std::io::Result<()> {
+	// let utc: DateTime<Local> = Local::now();
+	println!("Now: {}", utc);
+
 	let args: Vec<String> = env::args().collect();
 
 	let cmd = &args[1];
