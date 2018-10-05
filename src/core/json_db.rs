@@ -1,13 +1,19 @@
 use serde_json;
 use chrono::prelude::*;
 
-pub struct JsonDB {
-    pub json: serde_json::Value
+pub struct JsonDB<'a> {
+    pub json: serde_json::Value,
+    get_timestamp_fn: &'a Fn() -> i64
+
 }
 
-impl JsonDB {
-	pub fn new(json: serde_json::Value) -> JsonDB {
-		JsonDB { json }
+impl<'a> JsonDB<'a> {
+	pub fn new(json: serde_json::Value) -> JsonDB<'a> {
+		JsonDB { json, get_timestamp_fn: &get_timestamp }
+	}
+
+	fn _new(json: serde_json::Value, get_timestamp_fn: &'a Fn() -> i64) -> JsonDB<'a> {
+		JsonDB { json, get_timestamp_fn }
 	}
 
 	pub fn set_key(&mut self, key: &str, value: &str) {
@@ -15,25 +21,15 @@ impl JsonDB {
 	}
 
 	pub fn add_entry(&mut self, cat: &str, body: &str) {
-		self.add_entry_ext(cat, body, &get_timestamp);
-	}
-
-	fn add_entry_ext(
-		&mut self,
-		cat: &str, 
-		body: &str,
-		get_timestamp_fn: &Fn() -> i64) 
-	{
 		if self.json[cat].is_null() {
-	    	self.json[cat] = json!({"entries": [new_entry(body, 0, get_timestamp_fn)]});
+	    	self.json[cat] = json!({"entries": [new_entry(body, 0, self.get_timestamp_fn)]});
 	    }
 	    else {
 	    	let entries_ref = &mut self.json[cat]["entries"].as_array_mut().unwrap();
 	    	let id = entries_ref.len();
-	    	entries_ref.push(new_entry(body, id, get_timestamp_fn));
+	    	entries_ref.push(new_entry(body, id, self.get_timestamp_fn));
 	    }
 	}
-
 }
 
 fn new_entry(body: &str, id: usize, get_timestamp_fn: &Fn() -> i64) -> serde_json::Value {
@@ -56,8 +52,8 @@ mod test {
 		CONST_TIMESTAMP
 	}
 
-	fn _add_entry(db: &mut JsonDB, cat: &str, body: &str) {
-		db.add_entry_ext(cat, body, &get_timestamp_stub);
+	fn _db<'a>(json: serde_json::Value) -> JsonDB<'a> {
+		JsonDB::_new(json, &get_timestamp_stub)
 	}
 
 	fn _body(text: &str, id: usize) -> serde_json::Value {
@@ -66,8 +62,8 @@ mod test {
 
     #[test]
     fn can_add_entry_to_empty_json() {
-    	let mut db = JsonDB::new(json!({}));
-    	_add_entry(&mut db, "some_category", "some_body");
+    	let mut db = _db(json!({}));
+    	db.add_entry("some_category", "some_body");
     	assert_eq!(
     		json!({"some_category": {"entries": [_body("some_body", 0)]}}),
     		db.json);
@@ -75,8 +71,8 @@ mod test {
 
     #[test]
 	fn can_add_second_category() {
-		let mut db =JsonDB::new(json!({"category_1": {"entries": [_body("body_1", 0)]}}));
-		_add_entry(&mut db, "category_2", "body_2");
+		let mut db =_db(json!({"category_1": {"entries": [_body("body_1", 0)]}}));
+		db.add_entry("category_2", "body_2");
 		assert_eq!(
 			json!({
 				"category_1": {"entries": [_body("body_1", 0)]},
@@ -86,8 +82,8 @@ mod test {
 	}
 	#[test]
 	fn can_add_entry_to_existing_category() {
-		let mut db =JsonDB::new(json!({"category_1": {"entries": [_body("body_1", 0)]}}));
-		_add_entry(&mut db, "category_1", "body_2");
+		let mut db =_db(json!({"category_1": {"entries": [_body("body_1", 0)]}}));
+		db.add_entry("category_1", "body_2");
 		assert_eq!(
 			json!({"category_1": {"entries": [_body("body_1", 0), _body("body_2", 1)]}}),
 			db.json);

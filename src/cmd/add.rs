@@ -5,17 +5,16 @@ use std::path::Path;
 use serde_json;
 
 pub (super) fn execute(args: &[String]) {
-    init_file_if_needed();
+    init_log_if_needed();
 
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();
-
     let mut db = ::core::json_db::JsonDB::new(json);
 
     let cat = args[0].clone();
     let body = get_body(args);
 
     db.add_entry(&cat, &body);
-    write_back_json(&db.json);
+    write_log(&db.json);
 }
 
 fn get_body(args: &[String]) -> String {
@@ -27,14 +26,14 @@ fn get_body(args: &[String]) -> String {
     }
 }
 
-fn init_file_if_needed() {
+fn init_log_if_needed() {
     if !Path::new(::core::LOG_FILE).exists() {
 		let mut file = File::create(::core::LOG_FILE).expect("Create file failed");
 		file.write_all(b"{}").expect("Init file failed");
 	}
 }
 
-fn write_back_json(json: &serde_json::Value) {
+fn write_log(json: &serde_json::Value) {
 	let file = OpenOptions::new()
 					.write(true)
 					.truncate(true)
