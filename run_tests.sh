@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cargo test --lib $*
+cargo test $*
