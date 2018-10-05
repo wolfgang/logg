@@ -11,9 +11,9 @@ fn main() -> std::io::Result<()> {
 	let cmd = &args[1];
 
 	match cmd as &str {
-		"a" => cmd::add(&args[2..]),
-		"f" => cmd::search(&args),
-		"show" => cmd::show(&args),
+		"a" | "add" => cmd::add(&args[2..]),
+		"f" | "find" => cmd::search(&args),
+		"s" | "show" => cmd::show(&args),
 		_ => {
 			println!("Invalid command: {}", args[1]);
 			process::exit(1);
