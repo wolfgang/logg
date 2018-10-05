@@ -19,7 +19,7 @@ pub (super) fn execute(args: &[String]) {
 
 fn get_body(args: &[String]) -> String {
     if args.len() >=2 {
-        args[1].clone()
+        args[1..].join(" ")
     }
     else {
         ::core::editor::get_contents()
