@@ -65,7 +65,7 @@ mod test {
     	let mut db = _db(json!({}));
     	db.add_entry("some_category", "some_body");
     	assert_eq!(
-    		json!({"some_category": {"entries": [_body("some_body", 0)]}}),
+    		json!({"some_category": {"entries": [_body("soxme_body", 0)]}}),
     		db.json);
     }
 
