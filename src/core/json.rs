@@ -35,39 +35,49 @@ fn get_timestamp() -> i64 {
 mod test {
 	use super::*;
 
+	const CONST_TIMESTAMP: i64 = 1234;
+
 	fn get_timestamp_stub() -> i64 {
-		1234
+		CONST_TIMESTAMP
 	}
 
+	fn add_entry(json: &mut serde_json::Value, cat: &str, body: &str) {
+		add_entry_to_json_ext(json, cat, body, &get_timestamp_stub);
+	}
 
     #[test]
     fn can_add_entry_to_empty_json() {
     	let mut json = json!({});
-    	add_entry_to_json_ext(&mut json, "some_category", "some_body", &get_timestamp_stub);
+    	add_entry(&mut json, "some_category", "some_body");
     	assert_eq!(
-    		json!({"some_category": {"entries": [{"body": "some_body", "id": 0, "created_ts": 1234}]}}),
+    		json!({"some_category": {"entries": [{"body": "some_body", "id": 0, "created_ts": CONST_TIMESTAMP}]}}),
     		json);
     }
- //    #[test]
-	// fn can_add_second_category() {
-	// 	let mut json =json!({"category_1": {"entries": [{"body": "body_1", "id": 0}]}});
-	// 	add_entry_to_json(&mut json, "category_2", "body_2");
-	// 	assert_eq!(
-	// 		json!({
-	// 			"category_1": {"entries": [{"body": "body_1", "id": 0}]},
-	// 			"category_2": {"entries": [{"body": "body_2", "id": 0}]}
-	// 		}),
-	// 		json);
-	// }
-	// #[test]
-	// fn can_add_entry_to_existing_category() {
-	// 	let mut json =json!({"category_1": {"entries": [{"body": "body_1", "id": 0}]}});
-	// 	add_entry_to_json(&mut json, "category_1", "body_2");
-	// 	assert_eq!(
-	// 		json!({
-	// 			"category_1": {
-	// 				"entries": [{"body": "body_1", "id": 0}, {"body": "body_2", "id": 1}]}
-	// 		}),
-	// 		json);
-	// }
+
+    #[test]
+	fn can_add_second_category() {
+		let mut json =json!({"category_1": {"entries": [{"body": "body_1", "id": 0, "created_ts": CONST_TIMESTAMP}]}});
+		add_entry(&mut json, "category_2", "body_2");
+		assert_eq!(
+			json!({
+				"category_1": {"entries": [{"body": "body_1", "id": 0, "created_ts": CONST_TIMESTAMP}]},
+				"category_2": {"entries": [{"body": "body_2", "id": 0, "created_ts": CONST_TIMESTAMP}]}
+			}),
+			json);
+	}
+	#[test]
+	fn can_add_entry_to_existing_category() {
+		let mut json =json!({"category_1": {"entries": [{"body": "body_1", "id": 0, "created_ts": CONST_TIMESTAMP}]}});
+		add_entry(&mut json, "category_1", "body_2");
+		assert_eq!(
+			json!({
+				"category_1": {
+					"entries": [
+						{"body": "body_1", "id": 0, "created_ts": CONST_TIMESTAMP}, 
+						{"body": "body_2", "id": 1, "created_ts": CONST_TIMESTAMP}
+					]
+				}
+			}),
+			json);
+	}
 }
