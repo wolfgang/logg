@@ -1,6 +1,8 @@
 use serde_json;
 use colored::*;
 use ::core::{json_entry, json_filter};
+use chrono::prelude::*;
+
 
 const LINE: &'static str = "-------------------------------------------------------------------------------";
 
@@ -27,7 +29,10 @@ pub fn show_entry_for_search_result(result: &json_filter::SearchResult, index: u
 	let entry = &result.entries[index];
 	let body_as_str =  json_entry::get_body_as_str(entry);
 	let id = json_entry::get_id(&entry);
-	println!("{} {}\n{}\n{}\n{}", result.category.dimmed(), pretty_id(id), LINE, body_as_str, LINE);					
+	let created_ts = entry["created_ts"].as_i64().unwrap();
+	let created_ts_string = Local.timestamp(created_ts, 0).to_string();
+	println!("{} {}\nCreated: {}", result.category.dimmed(), pretty_id(id), created_ts_string.yellow());					
+	println!("{}\n{}\n{}", LINE, body_as_str, LINE);					
 }
 
 fn pretty_count(count: usize) -> ColoredString {
