@@ -1,0 +1,4 @@
+use chrono::prelude::*;
+
+let now: DateTime<Local> = Local::now();
+json!({"body": body, "id": id, "created": now.timestamp()})
