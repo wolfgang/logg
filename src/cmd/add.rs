@@ -7,13 +7,15 @@ use serde_json;
 pub (super) fn execute(args: &[String]) {
     init_file_if_needed();
 
-    let mut json: serde_json::Value = ::core::io::get_file_contents_as_json();
+    let json: serde_json::Value = ::core::io::get_file_contents_as_json();
+
+    let mut db = ::core::json_db::JsonDB::new(json);
 
     let cat = args[0].clone();
     let body = get_body(args);
 
-    ::core::json::add_entry_to_json(&mut json, &cat, &body);
-    write_back_json(&json);
+    db.add_entry(&cat, &body);
+    write_back_json(&db.json);
 }
 
 fn get_body(args: &[String]) -> String {
