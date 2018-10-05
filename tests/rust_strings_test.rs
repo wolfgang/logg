@@ -11,3 +11,13 @@ fn remove_enclosing_quotes() {
 	let trimmed = s.trim_matches('"');
 	assert_eq!("in quotes", trimmed);
 }
+
+#[test]
+fn join_strings_from_array() {
+	let args: Vec<String> = vec!(String::from("word1"), String::from("word2"));
+	let args_ref: &[String] = &args;
+	assert_eq!("word1 word2", args_ref.join(" "));
+
+
+
+}
