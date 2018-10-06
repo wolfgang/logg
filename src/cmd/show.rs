@@ -4,7 +4,7 @@ use core::error::*;
 
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
-	let json: serde_json::Value = io::get_file_contents_as_json();
+	let json: serde_json::Value = io::read_log();
 	if args.len()==2 {
 		display::show_toc(&json);
 		return Ok(())

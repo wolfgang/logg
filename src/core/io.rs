@@ -14,7 +14,7 @@ pub fn get_log_file() -> String {
 	format!("{}/{}", get_home_dir(), core::LOG_FILE)
 }
 
-pub fn get_file_contents_as_json() -> serde_json::Value {
+pub fn read_log() -> serde_json::Value {
 	let mut contents = String::new();
  	get_file_contents(&mut contents);
     serde_json::from_str(&contents).expect("Failed to parse json from file")

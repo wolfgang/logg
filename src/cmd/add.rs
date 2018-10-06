@@ -6,7 +6,7 @@ use core::error::*;
 use core::io;
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
-    let json: serde_json::Value = ::core::io::get_file_contents_as_json();
+    let json: serde_json::Value = ::core::io::read_log();
     let mut db = ::core::json_db::JsonDB::new(json);
 
     if args.len() == 0 {

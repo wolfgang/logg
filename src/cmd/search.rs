@@ -5,7 +5,7 @@ use core::error::*;
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let search_str = get_search_string(args)?;
-	let json: serde_json::Value = io::get_file_contents_as_json();
+	let json: serde_json::Value = io::read_log();
 	let results = json_filter::by_body(&search_str, &json);
 
 	if results.len()==1 && results[0].is_unqiue() {
