@@ -23,7 +23,7 @@ pub fn get_file_contents_as_json() -> serde_json::Value {
 fn get_file_contents(result: &mut String)  {
 	let file_for_read = OpenOptions::new()
 					.read(true)
-                    .open(::core::LOG_FILE).expect("Open for read failed");
+                    .open(get_log_file()).expect("Open for read failed");
     let mut file_for_read = BufReader::new(file_for_read);
 
  	file_for_read.read_to_string(result).expect("Read from file failed");

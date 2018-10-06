@@ -1,13 +1,11 @@
 use std::io::prelude::*;
 use std::io::BufWriter;
-use std::fs::{OpenOptions, File};
-use std::path::Path;
+use std::fs::OpenOptions;
 use serde_json;
 use core::error::*;
+use core::io;
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
-    init_log_if_needed();
-
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();
     let mut db = ::core::json_db::JsonDB::new(json);
 
@@ -32,18 +30,11 @@ fn get_body(args: &[String]) -> BoxedResult<String> {
     }
 }
 
-fn init_log_if_needed() {
-    if !Path::new(::core::LOG_FILE).exists() {
-		let mut file = File::create(::core::LOG_FILE).expect("Create file failed");
-		file.write_all(b"{}").expect("Init file failed");
-	}
-}
-
 fn write_log(json: &serde_json::Value) {
 	let file = OpenOptions::new()
 					.write(true)
 					.truncate(true)
-                    .open(::core::LOG_FILE).expect("Open for write failed");
+                    .open(io::get_log_file()).expect("Open for write failed");
     let mut file = BufWriter::new(file);
 
     file.write_all(serde_json::to_string_pretty(json).unwrap().as_bytes()).expect("Write failed");
