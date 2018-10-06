@@ -8,6 +8,11 @@ use logg::cmd;
 fn main() -> std::io::Result<()> {
 	let args: Vec<String> = env::args().collect();
 
+	if args.len()==1 {
+		println!("Error: no command specified (add/find/show)");
+		process::exit(1);
+	}
+
 	let cmd = &args[1];
 
 	let result = match cmd as &str {
