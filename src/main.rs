@@ -10,15 +10,30 @@ fn main() -> std::io::Result<()> {
 
 	let cmd = &args[1];
 
-	match cmd as &str {
-		"a" | "add" => cmd::add(&args[2..]),
-		"f" | "find" => cmd::search(&args),
-		"s" | "show" => cmd::show(&args),
+	let result = match cmd as &str {
+		"a" | "add" => cmd_add(&args[2..]),
+		// "f" | "find" => cmd::search::execute(&args),
+		// "s" | "show" => cmd::show::execute(&args),
 		_ => {
 			println!("Invalid command: {}", args[1]);
-			process::exit(1);
+			false
 		}
+	};
+
+	if !result {
+		process::exit(1);
 	}
 
+
     Ok(())
+}
+
+fn cmd_add(args: &[String]) -> bool {
+	match cmd::add::execute(args) {
+		Ok(()) => true,
+		Err(err) =>  {
+			println!("Error: {}", err);
+			false
+		}
+	}
 }

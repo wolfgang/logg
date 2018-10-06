@@ -6,7 +6,7 @@ use std::path::Path;
 use serde_json;
 use core::error::simple_error;
 
-pub (super) fn execute(args: &[String]) -> Result<(), Box<Error>> {
+pub fn execute(args: &[String]) -> Result<(), Box<Error>> {
     init_log_if_needed();
 
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();

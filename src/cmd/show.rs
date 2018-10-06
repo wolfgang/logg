@@ -1,10 +1,12 @@
+use std::error::Error;
 use serde_json;
 use ::core::{io, json_filter, display};
 
-pub(super) fn execute(args: &[String]) {
+pub fn execute(args: &[String]) -> Result<(), Box<Error>> {
 	let json: serde_json::Value = io::get_file_contents_as_json();
 	if args.len()==2 {
-		return display::show_toc(&json)
+		display::show_toc(&json);
+		return Ok(())
 	}
 
 	let cat = &args[2];
@@ -16,4 +18,6 @@ pub(super) fn execute(args: &[String]) {
 	else {
 		display::show_toc_for_search_result(&result);
 	}
+
+	Ok(())
 }
