@@ -20,12 +20,10 @@ fn prepare_editor_file() {
 
 fn edit_file() {
     let editor = env::var("EDITOR").expect("EDITOR variable is not set");
-    let status = Command::new(editor)
+    Command::new(&editor)
         .arg(EDITOR_FILE)
         .status()
-        .expect("Failed to execute editor");
-
-    println!("Editor exited with: {}", status);
+        .expect(&format!("Failed to execute editor {}", &editor));
 }
 
 fn get_editor_file_contents() -> BoxedResult<String> {
