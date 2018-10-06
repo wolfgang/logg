@@ -19,14 +19,19 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 
 	if args.len()==4 {
 		let id = args[3].parse::<usize>().unwrap();
-		if !result.is_valid_id(id) {
-			return simple_error(format!("Id {} is invalid for category '{}'", id, cat));
-		}
-		display::show_entry_for_search_result(&result, id);
+		show_search_result_entry_with_id(&result, id)?
 	}
 	else {
 		display::show_toc_for_search_result(&result);
 	}
 
+	Ok(())
+}
+
+fn show_search_result_entry_with_id(result: &json_filter::SearchResult, id: usize) -> EmptyBoxedResult {
+	if !result.is_valid_id(id) {
+		return simple_error(format!("Id {} is invalid for category '{}'", id, result.category))
+	}
+	display::show_entry_for_search_result(&result, id);
 	Ok(())
 }
