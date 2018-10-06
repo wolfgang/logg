@@ -2,7 +2,7 @@ extern crate logg;
 
 use std::env;
 use std::process;
-use logg::core::error::BoxedResult;
+use logg::cmd;
 use logg::cmd::*;
 
 
@@ -12,9 +12,9 @@ fn main() -> std::io::Result<()> {
 	let cmd = &args[1];
 
 	let result = match cmd as &str {
-		"a" | "add" => run_cmd(&add::execute, &args[2..]),
-		"f" | "find" => run_cmd(&search::execute, &args),
-		"s" | "show" => run_cmd(&show::execute, &args),
+		"a" | "add" => cmd::run_cmd(&add::execute, &args[2..]),
+		"f" | "find" => cmd::run_cmd(&search::execute, &args),
+		"s" | "show" => cmd::run_cmd(&show::execute, &args),
 		_ => {
 			println!("Error: Invalid command: {}", args[1]);
 			false
@@ -27,16 +27,4 @@ fn main() -> std::io::Result<()> {
 
 
     Ok(())
-}
-
-type CmdFn=&'static Fn(&[String]) -> BoxedResult;
-
-fn run_cmd(cmd_fn: CmdFn,  args: &[String]) -> bool {
-	match cmd_fn(args) {
-		Ok(()) => true,
-		Err(err) =>  {
-			println!("Error: {}", err);
-			false
-		}
-	}
 }
