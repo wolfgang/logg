@@ -1,10 +1,11 @@
 use std::io::prelude::*;
+use std::error::Error;
 use std::io::BufWriter;
 use std::fs::{OpenOptions, File};
 use std::path::Path;
 use serde_json;
 
-pub (super) fn execute(args: &[String]) {
+pub (super) fn execute(args: &[String]) -> Result<(), Box<Error>> {
     init_log_if_needed();
 
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();
@@ -15,6 +16,7 @@ pub (super) fn execute(args: &[String]) {
 
     db.add_entry(&cat, &body);
     write_log(&db.json);
+    Ok(())
 }
 
 fn get_body(args: &[String]) -> String {
