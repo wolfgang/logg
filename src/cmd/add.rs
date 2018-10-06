@@ -14,21 +14,21 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
     if args.len() == 0 {
         return simple_error("Please specifiy a category")
     }
-    
+
     let cat = args[0].clone();
-    let body = get_body(args);
+    let body = get_body(args)?;
 
     db.add_entry(&cat, &body);
     write_log(&db.json);
     Ok(())
 }
 
-fn get_body(args: &[String]) -> String {
+fn get_body(args: &[String]) -> BoxedResult<String> {
     if args.len() >=2 {
-        args[1..].join(" ")
+        Ok(args[1..].join(" "))
     }
     else {
-        ::core::editor::get_contents()
+        ::core::editor::get_contents()        
     }
 }
 

@@ -2,10 +2,11 @@ use std::fs;
 use std::env;
 use std::process::Command;
 use std::path::Path;
+use core::error::*;
 
 const EDITOR_FILE: &'static str = "/tmp/logg_tmp.txt";
 
-pub fn get_contents() -> String {
+pub fn get_contents() -> BoxedResult<String> {
     prepare_editor_file();
     edit_file();
     get_editor_file_contents()
@@ -25,11 +26,11 @@ fn edit_file() {
         .status()
         .expect("Failed to execute editor");
 
-    println!("editor exited with: {}", status);
+    println!("Editor exited with: {}", status);
 }
 
-fn get_editor_file_contents() -> String {
+fn get_editor_file_contents() -> BoxedResult<String> {
     let contents = fs::read_to_string(EDITOR_FILE).expect("Failed to read file contents");
     println!("edited file contents: {}", contents);
-    String::from(contents.trim_right())
+    Ok(String::from(contents.trim_right()))
 }
