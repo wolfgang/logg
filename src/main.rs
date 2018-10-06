@@ -1,15 +1,12 @@
 extern crate logg;
 
-use std::io::prelude::*;
 use std::env;
 use std::process;
-use std::fs::{DirBuilder, File};
-use std::path::Path;
 use logg::cmd;
 use logg::core::io;
 
 fn main() -> std::io::Result<()> {
-	init_log();
+	io::init_log();
 
 	let args: Vec<String> = env::args().collect();
 
@@ -35,16 +32,5 @@ fn main() -> std::io::Result<()> {
 	}
 
     Ok(())
-}
-
-fn init_log() {
-	if !Path::new(&io::get_home_dir()).exists() {
-		DirBuilder::new()
-			.recursive(false)
-			.create(io::get_home_dir()).expect("Failed to create home dir");
-	
-		let mut file = File::create(io::get_log_file()).expect("Create file failed");
-		file.write_all(b"{}").expect("Init file failed");
-	}
 }
 
