@@ -1,4 +1,5 @@
 use serde_json;
+use core::json_db::JsonDB;
 
 pub struct SearchResult<'a> {
     pub category: String,
@@ -25,8 +26,22 @@ impl<'a> SearchResult<'a> {
     pub fn is_valid_id(&self, id: usize) -> bool {
         return id < self.entries.len();
     }
-
 }
+
+pub trait Filter {
+    fn filter_by_body(&self, search_str: &str) -> Vec<SearchResult>;
+}
+
+
+impl<'a> Filter for JsonDB<'a> {
+    fn filter_by_body(&self, search_str: &str) -> Vec<SearchResult> {
+        by_body(search_str, &self.json)
+    }
+}
+
+
+
+
 
 
 pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {

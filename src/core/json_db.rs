@@ -1,6 +1,7 @@
 use serde_json;
 use chrono::prelude::*;
 
+
 pub struct JsonDB<'a> {
     pub json: serde_json::Value,
     get_timestamp_fn: &'a Fn() -> i64
