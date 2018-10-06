@@ -30,7 +30,10 @@ fn edit_file() {
 }
 
 fn get_editor_file_contents() -> BoxedResult<String> {
-    let contents = fs::read_to_string(EDITOR_FILE).expect("Failed to read file contents");
+    let contents = match fs::read_to_string(EDITOR_FILE) {
+        Ok(contents) => contents,
+        Err(err) => return simple_error_2(format!("Could not get editor contents: {}", err))
+    };
     println!("edited file contents: {}", contents);
     Ok(String::from(contents.trim_right()))
 }

@@ -12,7 +12,7 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
     let mut db = ::core::json_db::JsonDB::new(json);
 
     if args.len() == 0 {
-        return simple_error("Please specifiy a category")
+        return simple_error("Please specifiy a category".into())
     }
 
     let cat = args[0].clone();
