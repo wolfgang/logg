@@ -1,9 +1,9 @@
-use std::error::Error;
 use serde_json;
-use ::core::{io, json_filter, display};
+use core::{io, json_filter, display};
+use core::error::*;
 
 
-pub fn execute(args: &[String]) -> Result<(), Box<Error>> {
+pub fn execute(args: &[String]) -> BoxedResult {
 	let search_str = get_search_string(args);
 	let json: serde_json::Value = io::get_file_contents_as_json();
 	let results = json_filter::by_body(search_str, &json);

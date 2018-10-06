@@ -1,12 +1,11 @@
 use std::io::prelude::*;
-use std::error::Error;
 use std::io::BufWriter;
 use std::fs::{OpenOptions, File};
 use std::path::Path;
 use serde_json;
-use core::error::simple_error;
+use core::error::*;
 
-pub fn execute(args: &[String]) -> Result<(), Box<Error>> {
+pub fn execute(args: &[String]) -> BoxedResult {
     init_log_if_needed();
 
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();

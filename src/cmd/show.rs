@@ -1,8 +1,9 @@
-use std::error::Error;
 use serde_json;
-use ::core::{io, json_filter, display};
+use core::{io, json_filter, display};
+use core::error::*;
 
-pub fn execute(args: &[String]) -> Result<(), Box<Error>> {
+
+pub fn execute(args: &[String]) -> BoxedResult {
 	let json: serde_json::Value = io::get_file_contents_as_json();
 	if args.len()==2 {
 		display::show_toc(&json);
