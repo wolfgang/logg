@@ -13,10 +13,10 @@ fn main() -> std::io::Result<()> {
 
 	let result = match cmd as &str {
 		"a" | "add" => run_cmd(&add::execute, &args[2..]),
-		// "f" | "find" => cmd::search::execute(&args),
-		// "s" | "show" => cmd::show::execute(&args),
+		"f" | "find" => run_cmd(&search::execute, &args),
+		"s" | "show" => run_cmd(&show::execute, &args),
 		_ => {
-			println!("Invalid command: {}", args[1]);
+			println!("Error: Invalid command: {}", args[1]);
 			false
 		}
 	};
