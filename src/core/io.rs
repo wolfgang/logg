@@ -10,6 +10,10 @@ pub fn get_home_dir() -> String {
 	format!("{}/{}", home, core::LOGG_HOME)
 }
 
+pub fn get_log_file() -> String {
+	format!("{}/{}", get_home_dir(), core::LOG_FILE)
+}
+
 pub fn get_file_contents_as_json() -> serde_json::Value {
 	let mut contents = String::new();
  	get_file_contents(&mut contents);
