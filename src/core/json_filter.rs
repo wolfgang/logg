@@ -22,6 +22,10 @@ impl<'a> SearchResult<'a> {
         return self.entries.len() == 1;
     }
 
+    pub fn is_valid_id(&self, id: usize) -> bool {
+        return id < self.entries.len();
+    }
+
 }
 
 
