@@ -4,6 +4,7 @@ use std::io::BufWriter;
 use std::fs::{OpenOptions, File};
 use std::path::Path;
 use serde_json;
+use core::error::simple_error;
 
 pub (super) fn execute(args: &[String]) -> Result<(), Box<Error>> {
     init_log_if_needed();
@@ -11,6 +12,9 @@ pub (super) fn execute(args: &[String]) -> Result<(), Box<Error>> {
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();
     let mut db = ::core::json_db::JsonDB::new(json);
 
+    if args.len() == 0 {
+        return simple_error("Please specifiy a category")
+    }
     let cat = args[0].clone();
     let body = get_body(args);
 

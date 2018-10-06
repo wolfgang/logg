@@ -6,3 +6,4 @@ pub mod json_entry;
 pub mod io;
 pub mod editor;
 pub mod display;
+pub mod error;
