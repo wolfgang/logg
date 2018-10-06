@@ -1,8 +1,14 @@
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::OpenOptions;
+use std::env;
 use serde_json;
+use core;
 
+pub fn get_home_dir() -> String {
+	let home = env::var("HOME").unwrap();
+	format!("{}/{}", home, core::LOGG_HOME)
+}
 
 pub fn get_file_contents_as_json() -> serde_json::Value {
 	let mut contents = String::new();

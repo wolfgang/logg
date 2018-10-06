@@ -2,10 +2,14 @@ extern crate logg;
 
 use std::env;
 use std::process;
+use std::fs::{DirBuilder};
+use std::path::Path;
 use logg::cmd;
-
+use logg::core::io;
 
 fn main() -> std::io::Result<()> {
+	init_home_dir();
+
 	let args: Vec<String> = env::args().collect();
 
 	if args.len()==1 {
@@ -30,4 +34,12 @@ fn main() -> std::io::Result<()> {
 	}
 
     Ok(())
+}
+
+fn init_home_dir() {
+	if !Path::new(&io::get_home_dir()).exists() {
+	DirBuilder::new()
+		.recursive(false)
+		.create(io::get_home_dir()).unwrap();
+	}
 }

@@ -1,3 +1,4 @@
+pub const LOGG_HOME: &'static str =".logg";
 pub const LOG_FILE: &'static str = "logg.txt";
 
 pub mod json_db;
