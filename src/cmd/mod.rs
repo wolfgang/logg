@@ -1,10 +1,10 @@
-use core::error::BoxedResult;
+use core::error::EmptyBoxedResult;
 
 pub mod add;
 pub mod search;
 pub mod show;
 
-type CmdFn=&'static Fn(&[String]) -> BoxedResult;
+type CmdFn=&'static Fn(&[String]) -> EmptyBoxedResult;
 
 
 pub fn add(args: &[String]) -> bool {

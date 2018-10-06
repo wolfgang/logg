@@ -3,7 +3,7 @@ use core::{io, json_filter, display};
 use core::error::*;
 
 
-pub(super) fn execute(args: &[String]) -> BoxedResult {
+pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let json: serde_json::Value = io::get_file_contents_as_json();
 	if args.len()==2 {
 		display::show_toc(&json);

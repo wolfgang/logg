@@ -3,7 +3,7 @@ use core::{io, json_filter, display};
 use core::error::*;
 
 
-pub(super) fn execute(args: &[String]) -> BoxedResult {
+pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let search_str = get_search_string(args);
 	let json: serde_json::Value = io::get_file_contents_as_json();
 	let results = json_filter::by_body(search_str, &json);

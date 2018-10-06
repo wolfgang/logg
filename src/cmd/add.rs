@@ -5,7 +5,7 @@ use std::path::Path;
 use serde_json;
 use core::error::*;
 
-pub(super) fn execute(args: &[String]) -> BoxedResult {
+pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
     init_log_if_needed();
 
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();
@@ -14,6 +14,7 @@ pub(super) fn execute(args: &[String]) -> BoxedResult {
     if args.len() == 0 {
         return simple_error("Please specifiy a category")
     }
+    
     let cat = args[0].clone();
     let body = get_body(args);
 
