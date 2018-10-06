@@ -1,8 +1,8 @@
 extern crate logg;
 
 use std::env;
-use std::error::Error;
 use std::process;
+use logg::core::error::BoxedResult;
 use logg::cmd::*;
 
 
@@ -29,9 +29,7 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-type BoxedError=Result<(), Box<Error>>;
-
-type CmdFn=&'static Fn(&[String]) -> BoxedError;
+type CmdFn=&'static Fn(&[String]) -> BoxedResult;
 
 fn run_cmd(cmd_fn: CmdFn,  args: &[String]) -> bool {
 	match cmd_fn(args) {
