@@ -1,3 +1,4 @@
+use core::error;
 use core::error::EmptyBoxedResult;
 
 pub mod add;
@@ -23,7 +24,7 @@ fn run_cmd(cmd_fn: CmdFn,  args: &[String]) -> bool {
 	match cmd_fn(args) {
 		Ok(()) => true,
 		Err(err) =>  {
-			println!("Error: {}", err);
+			error::print(format!("{}", err));
 			false
 		}
 	}

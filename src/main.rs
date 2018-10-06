@@ -3,7 +3,7 @@ extern crate logg;
 use std::env;
 use std::process;
 use logg::cmd;
-use logg::core::io;
+use logg::core::{io, error};
 
 fn main() -> std::io::Result<()> {
 	io::init_log();
@@ -11,7 +11,7 @@ fn main() -> std::io::Result<()> {
 	let args: Vec<String> = env::args().collect();
 
 	if args.len()==1 {
-		println!("Error: no command specified (add/find/show)");
+		error::print("No command specified (add/find/show)".into());
 		process::exit(1);
 	}
 
@@ -22,7 +22,7 @@ fn main() -> std::io::Result<()> {
 		"f" | "find" => cmd::search(&args),
 		"s" | "show" => cmd::show(&args),
 		_ => {
-			println!("Error: Invalid command: {}", args[1]);
+			error::print(format!("Error: Invalid command: {}", args[1]));
 			false
 		}
 	};
