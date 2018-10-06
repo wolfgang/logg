@@ -1,12 +1,12 @@
 use serde_json;
-use core::{io, json_filter::Filter, display};
+use core::{io, json_db, json_filter::Filter, display};
 use core::error::*;
 
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let search_str = get_search_string(args)?;
 	let json: serde_json::Value = io::read_log();
-	let db = ::core::json_db::JsonDB::new(json);
+	let db = json_db::JsonDB::new(json);
 
 	let results = db.filter_by_body(&search_str);
 

@@ -30,12 +30,16 @@ impl<'a> SearchResult<'a> {
 
 pub trait Filter {
     fn filter_by_body(&self, search_str: &str) -> Vec<SearchResult>;
+    fn filter_by_category(&self, category: &str) -> SearchResult;
 }
 
 
 impl<'a> Filter for JsonDB<'a> {
     fn filter_by_body(&self, search_str: &str) -> Vec<SearchResult> {
         by_body(search_str, &self.json)
+    }
+    fn filter_by_category(&self, category: &str) -> SearchResult {
+        by_category(category, &self.json)
     }
 }
 
@@ -44,7 +48,7 @@ impl<'a> Filter for JsonDB<'a> {
 
 
 
-pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
+fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
 	let obj = json.as_object().unwrap();
     let mut  search_results = Vec::new();
     let search_str_lowercase = search_str.to_lowercase();
@@ -67,7 +71,7 @@ pub fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchR
     search_results	
 }
 
-pub fn by_category<'a>(category: &str, json: &'a serde_json::Value) -> SearchResult<'a> {
+fn by_category<'a>(category: &str, json: &'a serde_json::Value) -> SearchResult<'a> {
     let mut result = SearchResult::new(String::from(category));
     let obj = json.as_object().unwrap();
 

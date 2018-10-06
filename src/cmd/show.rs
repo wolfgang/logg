@@ -1,17 +1,18 @@
 use serde_json;
-use core::{io, json_filter, display};
+use core::{io, json_db, json_filter, json_filter::Filter, display};
 use core::error::*;
 
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let json: serde_json::Value = io::read_log();
+	let db = json_db::JsonDB::new(json);
 	if args.len()==2 {
-		display::show_toc(&json);
+		display::show_toc(&db);
 		return Ok(())
 	}
 
 	let cat = &args[2];
-	let result = json_filter::by_category(cat, &json);
+	let result = db.filter_by_category(cat);
 
 	if !result.has_entries() {
 		return simple_error(format!("No entries found for category '{}'", cat));

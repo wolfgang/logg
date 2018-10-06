@@ -1,14 +1,11 @@
-use serde_json;
 use colored::*;
-use ::core::{json_entry, json_filter};
+use ::core::{json_entry, json_filter, json_filter::Filter, json_db::JsonDB};
 use chrono::prelude::*;
-
 
 const LINE: &'static str = "-------------------------------------------------------------------------------";
 
-
-pub fn show_toc(json: &serde_json::Value) {
-	let results = json_filter::by_body("", json);
+pub fn show_toc(db: &JsonDB) {
+	let results = db.filter_by_body("");
 	for result in results {
 		println!("> {} {}", result.category, pretty_count(result.entries.len()));
 	}
