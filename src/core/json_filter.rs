@@ -52,6 +52,10 @@ pub fn by_category<'a>(category: &str, json: &'a serde_json::Value) -> SearchRes
     let mut result = SearchResult::new(String::from(category));
     let obj = json.as_object().unwrap();
 
+    if !obj.contains_key(category) {
+        return result
+    }
+
     let entries = &obj[category]["entries"];
     for entry in entries.as_array().unwrap() {
         result.add(entry)
@@ -66,7 +70,6 @@ pub fn by_category<'a>(category: &str, json: &'a serde_json::Value) -> SearchRes
 mod test {
 	use super::*;
 
-
     #[test]
     fn by_category_returns_category() {
         let json = json!(
@@ -78,6 +81,13 @@ mod test {
         let result2= by_category("cat2", &json);
         assert_result(&result1, "cat1", vec!(&entry_with_body("body with word1")));
         assert_result(&result2, "cat2", vec!(&entry_with_body("body with word2")));
+    }
+
+    #[test]
+    fn by_category_returns_empty_result_if_category_does_not_exist() {
+        let json = json!({});
+        let result = by_category("cat1", &json);
+        assert!(!result.has_entries());
     }
 
     #[test]

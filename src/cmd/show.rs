@@ -12,6 +12,11 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 
 	let cat = &args[2];
 	let result = json_filter::by_category(cat, &json);
+
+	if !result.has_entries() {
+		return simple_error(format!("No entries found for category '{}'", cat));
+	}
+
 	if args.len()==4 {
 		let index = args[3].parse::<usize>().unwrap();
 		display::show_entry_for_search_result(&result, index);
