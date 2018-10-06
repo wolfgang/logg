@@ -16,7 +16,6 @@ fn prepare_editor_file() {
     if Path::new(EDITOR_FILE).exists() {
         fs::remove_file(EDITOR_FILE).expect("Failed to remove temp file");
     }
-
 }
 
 fn edit_file() {
@@ -32,8 +31,7 @@ fn edit_file() {
 fn get_editor_file_contents() -> BoxedResult<String> {
     let contents = match fs::read_to_string(EDITOR_FILE) {
         Ok(contents) => contents,
-        Err(err) => return simple_error_2(format!("Could not get editor contents: {}", err))
+        Err(err) => return simple_error(format!("Could not get editor contents: {}", err))
     };
-    println!("edited file contents: {}", contents);
     Ok(String::from(contents.trim_right()))
 }
