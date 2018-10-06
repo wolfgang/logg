@@ -18,7 +18,7 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	}
 
 	if args.len()==4 {
-		let id = args[3].parse::<usize>().unwrap();
+		let id = parse_id(&args[3])?;
 		show_search_result_entry_with_id(&result, id)?
 	}
 	else {
@@ -26,6 +26,12 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	}
 
 	Ok(())
+}
+
+fn parse_id(id_str: &str) -> BoxedResult<usize> {
+	id_str.parse::<usize>().or_else({|error|
+		simple_error(format!("Could not parse id from '{}': {}", id_str, error))
+	})
 }
 
 fn show_search_result_entry_with_id(result: &json_filter::SearchResult, id: usize) -> EmptyBoxedResult {
