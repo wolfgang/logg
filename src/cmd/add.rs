@@ -5,7 +5,7 @@ use std::path::Path;
 use serde_json;
 use core::error::*;
 
-pub fn execute(args: &[String]) -> BoxedResult {
+pub(super) fn execute(args: &[String]) -> BoxedResult {
     init_log_if_needed();
 
     let json: serde_json::Value = ::core::io::get_file_contents_as_json();
