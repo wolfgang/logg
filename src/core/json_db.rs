@@ -27,6 +27,12 @@ impl<'a> JsonDB<'a> {
 	    	entries_ref.push(new_entry(body, id, self.get_timestamp_fn));
 	    }
 	}
+
+	pub fn replace_entry(&mut self, cat: &str, id: usize, new_body: &str) {
+		let entries_ref = &mut self.json[cat]["entries"].as_array_mut().unwrap();
+		entries_ref.remove(id);
+		entries_ref.insert(id, new_entry(new_body, id, self.get_timestamp_fn));
+	}
 }
 
 fn new_entry(body: &str, id: usize, get_timestamp_fn: &Fn() -> i64) -> serde_json::Value {
@@ -83,6 +89,14 @@ mod test {
 		db.add_entry("category_1", "body_2");
 		assert_eq!(
 			json!({"category_1": {"entries": [_body("body_1", 0), _body("body_2", 1)]}}),
+			db.json);
+	}
+	#[test]
+	fn replace_entry() {
+		let mut db =_db(json!({"category_1": {"entries": [_body("body_1", 0)]}}));
+		db.replace_entry("category_1", 0, "body_replaced");
+		assert_eq!(
+			json!({"category_1": {"entries": [_body("body_replaced", 0)]}}),
 			db.json);
 	}
 }
