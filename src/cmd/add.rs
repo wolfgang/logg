@@ -23,6 +23,6 @@ fn get_body(args: &[String]) -> BoxedResult<String> {
         Ok(args[1..].join(" "))
     }
     else {
-        ::core::editor::get_contents()        
+        ::core::editor::get_contents("")        
     }
 }
