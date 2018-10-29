@@ -21,6 +21,7 @@ fn main() -> std::io::Result<()> {
 		"a" | "add" => cmd::add(&args[2..]),
 		"f" | "find" => cmd::search(&args),
 		"s" | "show" => cmd::show(&args),
+		"e" | "edit" => cmd::edit(&args),
 		_ => {
 			error::print(format!("Error: Invalid command: {}", args[1]));
 			false
