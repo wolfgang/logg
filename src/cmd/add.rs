@@ -2,7 +2,6 @@ use core::error::*;
 use core::io;
 use cmd::utils;
 
-
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
     let mut db = utils::create_db_from_log();
 

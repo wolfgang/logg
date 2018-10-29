@@ -13,7 +13,7 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let result = utils::get_requested_category(args, &db)?;
 
 	if args.len()==4 {
-		let id = parse_id(&args[3])?;
+		let id = utils::parse_requested_id(args)?;
 		show_search_result_entry_with_id(&result, id)?
 	}
 	else {
@@ -21,12 +21,6 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	}
 
 	Ok(())
-}
-
-fn parse_id(id_str: &str) -> BoxedResult<usize> {
-	id_str.parse::<usize>().or_else({|error|
-		simple_error(format!("Could not parse id from '{}': {}", id_str, error))
-	})
 }
 
 fn show_search_result_entry_with_id(result: &json_filter::SearchResult, id: usize) -> EmptyBoxedResult {

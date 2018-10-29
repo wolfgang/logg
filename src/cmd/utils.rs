@@ -16,3 +16,10 @@ pub fn get_requested_category<'a>(args: &[String], db: &'a json_db::JsonDB) -> B
 	}
 	Ok(result)
 }
+
+pub fn parse_requested_id(args: &[String]) -> BoxedResult<usize> {
+	let id_str = &args[3];
+	id_str.parse::<usize>().or_else({|error|
+		simple_error(format!("Could not parse id from '{}': {}", id_str, error))
+	})
+}
