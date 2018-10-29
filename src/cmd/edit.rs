@@ -5,6 +5,10 @@ use cmd::utils;
 pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let db = utils::create_db_from_log();
 
+	if args.len() < 4 {
+		return simple_error("Edit command expected category and id".into());
+	}
+
 	let result = utils::get_requested_category(args, &db)?;
 	let id = utils::parse_requested_id(args)?;
 	utils::check_is_valid_id(id, &result)?;
