@@ -18,12 +18,8 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let entry = &result.entries[id];
 	let body_as_str =  json_entry::get_body_as_str(entry);
 
-	println!("{}", body_as_str);
 
 	let new_body = get_edited_body(body_as_str).unwrap();
-
-	println!("{}", new_body);
-
 	
 	let json: serde_json::Value = io::read_log();
 	let mut db = json_db::JsonDB::new(json);

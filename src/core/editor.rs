@@ -1,12 +1,10 @@
 use std::io::prelude::*;
 use std::fs;
+use std::fs::File;
 use std::env;
 use std::process::Command;
 use std::path::Path;
 use core::error::*;
-use std::fs::{OpenOptions, DirBuilder, File};
-use std::io::BufWriter;
-
 
 const EDITOR_FILE: &'static str = "/tmp/logg_tmp.txt";
 
