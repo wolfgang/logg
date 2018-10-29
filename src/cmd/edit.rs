@@ -16,8 +16,7 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let id = parse_id(&args[3])?;
 	let body_as_str =  result.get_body_by_id(id);
 
-
-	let new_body = get_edited_body(body_as_str).unwrap();
+	let new_body = get_edited_body(body_as_str)?;
 	
 	let mut db = utils::create_db_from_log();
 
