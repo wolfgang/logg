@@ -4,8 +4,7 @@ use core::{io, json_db, json_filter::Filter};
 
 
 pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
-	let json: serde_json::Value = io::read_log();
-	let db = json_db::JsonDB::new(json);
+	let db = get_db();
 
 	let cat = &args[2];
 	let result = db.filter_by_category(cat);
@@ -20,14 +19,18 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 
 	let new_body = get_edited_body(body_as_str).unwrap();
 	
-	let json: serde_json::Value = io::read_log();
-	let mut db = json_db::JsonDB::new(json);
+	let mut db = get_db();
 
 	db.replace_entry(cat, id, &new_body);
 	io::write_log(&db.json);
 
 	Ok(())
 
+}
+
+fn get_db<'a>() -> json_db::JsonDB<'a> {
+	let json: serde_json::Value = io::read_log();
+	json_db::JsonDB::new(json)
 }
 
 fn parse_id(id_str: &str) -> BoxedResult<usize> {
