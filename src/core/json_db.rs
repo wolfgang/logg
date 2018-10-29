@@ -19,12 +19,12 @@ impl<'a> JsonDB<'a> {
 
 	pub fn add_entry(&mut self, cat: &str, body: &str) {
 		if self.json[cat].is_null() {
-	    	self.json[cat] = json!({"entries": [new_entry(body, 0, self.get_timestamp_fn)]});
+	    	self.json[cat] = json!({"entries": [new_entry(body, 0, (self.get_timestamp_fn)())]});
 	    }
 	    else {
 	    	let entries_ref = self.json[cat]["entries"].as_array_mut().unwrap();
 	    	let id = entries_ref.len();
-	    	entries_ref.push(new_entry(body, id, self.get_timestamp_fn));
+	    	entries_ref.push(new_entry(body, id, (self.get_timestamp_fn)()));
 	    }
 	}
 
@@ -32,17 +32,18 @@ impl<'a> JsonDB<'a> {
 		let entries_ref = self.json[cat]["entries"].as_array_mut().unwrap();
 		let created_ts = entries_ref[id]["created_ts"].as_i64().unwrap();
 		entries_ref.remove(id);
-		entries_ref.insert(id, new_entry_with_created_ts(new_body, id, created_ts));
+		entries_ref.insert(id, updated_entry(new_body, id, created_ts, (self.get_timestamp_fn)()));
 	}
 }
 
-fn new_entry(body: &str, id: usize, get_timestamp_fn: &Fn() -> i64) -> serde_json::Value {
-	new_entry_with_created_ts(body, id, get_timestamp_fn())
+fn new_entry(body: &str, id: usize, created_ts: i64) -> serde_json::Value {
+	updated_entry(body, id, created_ts, created_ts)
 } 
 
-fn new_entry_with_created_ts(body: &str, id: usize, created_ts: i64) -> serde_json::Value {
-	json!({"body": body, "id": id, "created_ts": created_ts})
+fn updated_entry(body: &str, id: usize, created_ts: i64, updated_ts: i64) -> serde_json::Value {
+	json!({"body": body, "id": id, "created_ts": created_ts, "updated_ts": updated_ts})
 } 
+
 
 
 fn get_timestamp() -> i64 {
@@ -66,7 +67,7 @@ mod test {
 	}
 
 	fn _body(text: &str, id: usize) -> serde_json::Value {
-		json!({"body": text, "id": id, "created_ts": CONST_TIMESTAMP})
+		json!({"body": text, "id": id, "created_ts": CONST_TIMESTAMP, "updated_ts": CONST_TIMESTAMP})
 	}
 
     #[test]
