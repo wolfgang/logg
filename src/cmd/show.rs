@@ -24,9 +24,7 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 }
 
 fn show_search_result_entry_with_id(result: &json_filter::SearchResult, id: usize) -> EmptyBoxedResult {
-	if !result.is_valid_id(id) {
-		return simple_error(format!("Id {} is invalid for category '{}'", id, result.category))
-	}
+	utils::check_is_valid_id(id, &result)?;
 	display::show_entry_for_search_result(&result, id);
 	Ok(())
 }

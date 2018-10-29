@@ -23,3 +23,10 @@ pub fn parse_requested_id(args: &[String]) -> BoxedResult<usize> {
 		simple_error(format!("Could not parse id from '{}': {}", id_str, error))
 	})
 }
+
+pub fn check_is_valid_id(id: usize, result: &SearchResult) -> EmptyBoxedResult {
+	if !result.is_valid_id(id) {
+		return simple_error(format!("Id {} is invalid for category '{}'", id, result.category))
+	}
+	Ok(())
+}
