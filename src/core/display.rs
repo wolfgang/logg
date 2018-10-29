@@ -28,7 +28,15 @@ pub fn show_entry_for_search_result(result: &json_filter::SearchResult, index: u
 	let id = json_entry::get_id(&entry);
 	let created_ts = entry["created_ts"].as_i64().unwrap();
 	let created_ts_string = Local.timestamp(created_ts, 0).to_string();
-	println!("{} {}\nCreated: {}", result.category.dimmed(), pretty_id(id), created_ts_string.yellow());					
+	println!("{} {}\nCreated: {}", result.category.dimmed(), pretty_id(id), created_ts_string.yellow());
+	if entry.as_object().unwrap().contains_key("updated_ts") {
+		let updated_ts = entry["updated_ts"].as_i64().unwrap();
+		if updated_ts != created_ts {
+			let updated_ts_string = Local.timestamp(updated_ts, 0).to_string();
+			println!("Updated: {}", updated_ts_string.yellow());					
+		}
+	}
+
 	println!("{}\n{}\n{}", LINE, body_as_str, LINE);					
 }
 
