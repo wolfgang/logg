@@ -93,10 +93,18 @@ mod test {
 	}
 	#[test]
 	fn replace_entry() {
-		let mut db =_db(json!({"category_1": {"entries": [_body("body_1", 0)]}}));
-		db.replace_entry("category_1", 0, "body_replaced");
+		let mut db =_db(json!({
+			"category_1": {"entries": [_body("body_1", 0), _body("body_2", 1)]}}));
+		db.replace_entry("category_1", 0, "body_1_replaced");
 		assert_eq!(
-			json!({"category_1": {"entries": [_body("body_replaced", 0)]}}),
+			json!({
+				"category_1": {"entries": [_body("body_1_replaced", 0), _body("body_2", 1)]}}),
+			db.json);
+		db.replace_entry("category_1", 1, "body_2_replaced");
+
+		assert_eq!(
+			json!({
+				"category_1": {"entries": [_body("body_1_replaced", 0), _body("body_2_replaced", 1)]}}),
 			db.json);
 	}
 }
