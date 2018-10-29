@@ -17,10 +17,6 @@ impl<'a> JsonDB<'a> {
 		JsonDB { json, get_timestamp_fn }
 	}
 
-	pub fn set_key(&mut self, key: &str, value: &str) {
-		self.json[key] = json!({"value": value});
-	}
-
 	pub fn add_entry(&mut self, cat: &str, body: &str) {
 		if self.json[cat].is_null() {
 	    	self.json[cat] = json!({"entries": [new_entry(body, 0, self.get_timestamp_fn)]});
