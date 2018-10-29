@@ -1,7 +1,18 @@
-use core::{io, json_db};
+use core::{io, json_db, json_filter::SearchResult, json_filter::Filter};
+use core::error::*;
+
 
 pub fn create_db_from_log<'a>() -> json_db::JsonDB<'a> {
 	let json: serde_json::Value = io::read_log();
 	json_db::JsonDB::new(json)
 }
 
+pub fn get_requested_category<'a>(args: &[String], db: &'a json_db::JsonDB) -> BoxedResult<SearchResult<'a>> {
+	let cat = &args[2];
+	let result = db.filter_by_category(cat);
+
+	if !result.has_entries() {
+		return simple_error(format!("No entries found for category '{}'", cat));
+	}
+	Ok(result)
+}

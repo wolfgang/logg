@@ -1,17 +1,11 @@
 use core::error::*;
-use core::error::EmptyBoxedResult;
-use core::{io, json_filter::Filter};
+use core::io;
 use cmd::utils;
 
 pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let db = utils::create_db_from_log();
 
-	let cat = &args[2];
-	let result = db.filter_by_category(cat);
-
-	if !result.has_entries() {
-		return simple_error(format!("No entries found for category '{}'", cat));
-	}
+	let result = utils::get_requested_category(args, &db)?;
 
 	let id = parse_id(&args[3])?;
 	let body_as_str =  result.get_body_by_id(id);
@@ -20,7 +14,7 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	
 	let mut db = utils::create_db_from_log();
 
-	db.replace_entry(cat, id, &new_body);
+	db.replace_entry(&result.category, id, &new_body);
 	io::write_log(&db.json);
 
 	Ok(())
