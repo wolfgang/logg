@@ -1,4 +1,4 @@
-use core::{json_filter, json_filter::Filter, display};
+use core::{json_filter, display};
 use core::error::*;
 use cmd::utils;
 
@@ -10,12 +10,7 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 		return Ok(())
 	}
 
-	let cat = &args[2];
-	let result = db.filter_by_category(cat);
-
-	if !result.has_entries() {
-		return simple_error(format!("No entries found for category '{}'", cat));
-	}
+	let result = utils::get_requested_category(args, &db)?;
 
 	if args.len()==4 {
 		let id = parse_id(&args[3])?;
