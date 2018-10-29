@@ -1,10 +1,10 @@
-use serde_json;
 use core::error::*;
 use core::io;
+use cmd::utils;
+
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
-    let json: serde_json::Value = ::core::io::read_log();
-    let mut db = ::core::json_db::JsonDB::new(json);
+    let mut db = utils::create_db_from_log();
 
     if args.len() == 0 {
         return simple_error("Please specifiy a category".into())

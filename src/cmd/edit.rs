@@ -3,7 +3,6 @@ use core::error::EmptyBoxedResult;
 use core::{io, json_filter::Filter};
 use cmd::utils;
 
-
 pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let db = utils::create_db_from_log();
 

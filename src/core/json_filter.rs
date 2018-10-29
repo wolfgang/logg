@@ -48,11 +48,6 @@ impl<'a> Filter for JsonDB<'a> {
     }
 }
 
-
-
-
-
-
 fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
 	let obj = json.as_object().unwrap();
     let mut  search_results = Vec::new();
