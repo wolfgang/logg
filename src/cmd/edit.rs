@@ -1,6 +1,6 @@
 use core::error::*;
 use core::error::EmptyBoxedResult;
-use core::{io, json_db, json_entry, json_filter::Filter};
+use core::{io, json_db, json_filter::Filter};
 
 
 pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
@@ -15,8 +15,7 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	}
 
 	let id = parse_id(&args[3])?;
-	let entry = &result.entries[id];
-	let body_as_str =  json_entry::get_body_as_str(entry);
+	let body_as_str =  result.get_body_by_id(id);
 
 
 	let new_body = get_edited_body(body_as_str).unwrap();

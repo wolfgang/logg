@@ -1,5 +1,5 @@
 use serde_json;
-use core::json_db::JsonDB;
+use core::{json_db::JsonDB, json_entry};
 
 pub struct SearchResult<'a> {
     pub category: String,
@@ -25,6 +25,11 @@ impl<'a> SearchResult<'a> {
 
     pub fn is_valid_id(&self, id: usize) -> bool {
         return id < self.entries.len();
+    }
+
+    pub fn get_body_by_id(&self, id: usize) -> &str {
+        let entry = &self.entries[id];
+        json_entry::get_body_as_str(entry)
     }
 }
 
