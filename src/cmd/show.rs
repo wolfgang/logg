@@ -1,11 +1,10 @@
-use serde_json;
-use core::{io, json_db, json_filter, json_filter::Filter, display};
+use core::{json_filter, json_filter::Filter, display};
 use core::error::*;
-
+use cmd::utils;
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
-	let json: serde_json::Value = io::read_log();
-	let db = json_db::JsonDB::new(json);
+	let db = utils::create_db_from_log();
+
 	if args.len()==2 {
 		display::show_toc(&db);
 		return Ok(())
