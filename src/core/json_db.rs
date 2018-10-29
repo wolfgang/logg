@@ -22,22 +22,28 @@ impl<'a> JsonDB<'a> {
 	    	self.json[cat] = json!({"entries": [new_entry(body, 0, self.get_timestamp_fn)]});
 	    }
 	    else {
-	    	let entries_ref = &mut self.json[cat]["entries"].as_array_mut().unwrap();
+	    	let entries_ref = self.json[cat]["entries"].as_array_mut().unwrap();
 	    	let id = entries_ref.len();
 	    	entries_ref.push(new_entry(body, id, self.get_timestamp_fn));
 	    }
 	}
 
 	pub fn replace_entry(&mut self, cat: &str, id: usize, new_body: &str) {
-		let entries_ref = &mut self.json[cat]["entries"].as_array_mut().unwrap();
+		let entries_ref = self.json[cat]["entries"].as_array_mut().unwrap();
+		let created_ts = entries_ref[id]["created_ts"].as_i64().unwrap();
 		entries_ref.remove(id);
-		entries_ref.insert(id, new_entry(new_body, id, self.get_timestamp_fn));
+		entries_ref.insert(id, updated_entry(new_body, id, created_ts));
 	}
 }
 
 fn new_entry(body: &str, id: usize, get_timestamp_fn: &Fn() -> i64) -> serde_json::Value {
 	json!({"body": body, "id": id, "created_ts": get_timestamp_fn()})
 } 
+
+fn updated_entry(body: &str, id: usize, created_ts: i64) -> serde_json::Value {
+	json!({"body": body, "id": id, "created_ts": created_ts})
+} 
+
 
 fn get_timestamp() -> i64 {
 	let now: DateTime<Local> = Local::now();
