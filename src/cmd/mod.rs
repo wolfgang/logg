@@ -5,6 +5,7 @@ pub mod add;
 pub mod edit;
 pub mod search;
 pub mod show;
+mod utils;
 
 type CmdFn=&'static Fn(&[String]) -> EmptyBoxedResult;
 

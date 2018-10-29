@@ -1,10 +1,11 @@
 use core::error::*;
 use core::error::EmptyBoxedResult;
-use core::{io, json_db, json_filter::Filter};
+use core::{io, json_filter::Filter};
+use cmd::utils;
 
 
 pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
-	let db = get_db();
+	let db = utils::create_db_from_log();
 
 	let cat = &args[2];
 	let result = db.filter_by_category(cat);
@@ -19,18 +20,13 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 
 	let new_body = get_edited_body(body_as_str).unwrap();
 	
-	let mut db = get_db();
+	let mut db = utils::create_db_from_log();
 
 	db.replace_entry(cat, id, &new_body);
 	io::write_log(&db.json);
 
 	Ok(())
 
-}
-
-fn get_db<'a>() -> json_db::JsonDB<'a> {
-	let json: serde_json::Value = io::read_log();
-	json_db::JsonDB::new(json)
 }
 
 fn parse_id(id_str: &str) -> BoxedResult<usize> {
