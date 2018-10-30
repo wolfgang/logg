@@ -1,18 +1,18 @@
 use serde_json;
 use core::{json_db::JsonDB, json_entry};
 
-pub struct SearchResult<'a> {
+pub struct SearchResult {
     pub category: String,
-    pub entries: Vec<&'a serde_json::Value>
+    pub entries: Vec<serde_json::Value>
 }
 
-impl<'a> SearchResult<'a> {
-    pub fn new(category: String) -> SearchResult<'a> {
+impl SearchResult {
+    pub fn new(category: String) -> SearchResult {
         SearchResult { category, entries: Vec::new() }
     }
 
-    pub fn add(&mut self, entry: &'a serde_json::Value) {
-        self.entries.push(entry);
+    pub fn add(&mut self, entry: &serde_json::Value) {
+        self.entries.push(entry.clone());
     }
 
     pub fn has_entries(&self) -> bool {
@@ -48,7 +48,7 @@ impl<'a> Filter for JsonDB<'a> {
     }
 }
 
-fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResult<'a>> {
+fn by_body(search_str: &str, json: &serde_json::Value) -> Vec<SearchResult> {
 	let obj = json.as_object().unwrap();
     let mut  search_results = Vec::new();
     let search_str_lowercase = search_str.to_lowercase();
@@ -71,7 +71,7 @@ fn by_body<'a>(search_str: &str, json: &'a serde_json::Value) -> Vec<SearchResul
     search_results	
 }
 
-fn by_category<'a>(category: &str, json: &'a serde_json::Value) -> SearchResult<'a> {
+fn by_category(category: &str, json: &serde_json::Value) -> SearchResult {
     let mut result = SearchResult::new(String::from(category));
     let obj = json.as_object().unwrap();
 
@@ -102,8 +102,8 @@ mod test {
             });
         let result1 = by_category("cat1", &json);
         let result2= by_category("cat2", &json);
-        assert_result(&result1, "cat1", vec!(&entry_with_body("body with word1")));
-        assert_result(&result2, "cat2", vec!(&entry_with_body("body with word2")));
+        assert_result(&result1, "cat1", vec!(entry_with_body("body with word1")));
+        assert_result(&result2, "cat2", vec!(entry_with_body("body with word2")));
     }
 
     #[test]
@@ -128,8 +128,8 @@ mod test {
         sr.add(&entry1);
         sr.add(&entry2);
         assert_eq!(2, sr.entries.len());
-        assert_eq!(&entry1, sr.entries[0]);
-        assert_eq!(&entry2, sr.entries[1]);
+        assert_eq!(entry1, sr.entries[0]);
+        assert_eq!(entry2, sr.entries[1]);
     }
 
     #[test]
@@ -159,10 +159,10 @@ mod test {
     	let results = by_body("", &json);
     	assert_eq!(2, results.len());
 
-        assert_result_in(&results, 0, "cat1", vec!(&entry_with_body("some body 1")));
+        assert_result_in(&results, 0, "cat1", vec!(entry_with_body("some body 1")));
         assert_result_in(
             &results, 1, "cat2", 
-            vec!(&entry_with_body("some body 2"), &entry_with_body("some body 3")));
+            vec!(entry_with_body("some body 2"), entry_with_body("some body 3")));
     }
 
     #[test]
@@ -179,10 +179,8 @@ mod test {
         let results = by_body("word1", &json);
         assert_eq!(2, results.len());
 
-        assert_result_in(&results, 0, "cat1", 
-            vec!(&entry_with_body("body with word1")));
-        assert_result_in(&results, 1, "cat2",
-            vec!(&entry_with_body("another body with word1")));
+        assert_result_in(&results, 0, "cat1", vec!(entry_with_body("body with word1")));
+        assert_result_in(&results, 1, "cat2", vec!(entry_with_body("another body with word1")));
     }
 
     #[test]
@@ -194,7 +192,7 @@ mod test {
             });
         let results = by_body("word1", &json);
         assert_eq!(1, results.len());
-        assert_result_in(&results, 0, "cat1", vec!(&entry_with_body("body with word1")));
+        assert_result_in(&results, 0, "cat1", vec!(entry_with_body("body with word1")));
     }
 
     #[test]
@@ -208,12 +206,12 @@ mod test {
         results: &Vec<SearchResult>, 
         index: usize, 
         category: &str, 
-        entries: Vec<&serde_json::Value>) 
+        entries: Vec<serde_json::Value>) 
     {
         assert_result(&results[index], category, entries);
     }
 
-    fn assert_result(result: &SearchResult, category: &str, entries: Vec<&serde_json::Value>) {
+    fn assert_result(result: &SearchResult, category: &str, entries: Vec<serde_json::Value>) {
         assert_eq!(category, result.category);
         let matching_entries = &result.entries;
         assert_eq!(&entries, matching_entries);

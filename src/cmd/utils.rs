@@ -7,7 +7,7 @@ pub fn create_db_from_log<'a>() -> json_db::JsonDB<'a> {
 	json_db::JsonDB::new(json)
 }
 
-pub fn get_requested_category<'a>(args: &[String], db: &'a json_db::JsonDB) -> BoxedResult<SearchResult<'a>> {
+pub fn get_requested_category(args: &[String], db: &json_db::JsonDB) -> BoxedResult<SearchResult> {
 	let cat = &args[2];
 	let result = db.filter_by_category(cat);
 
