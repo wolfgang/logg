@@ -17,15 +17,17 @@ impl<'a> JsonDB<'a> {
 		JsonDB { json, get_timestamp_fn }
 	}
 
-	pub fn add_entry(&mut self, cat: &str, body: &str) {
+	pub fn add_entry(&mut self, cat: &str, body: &str) -> i64 {
+		let mut the_id = 0;
 		if self.json[cat].is_null() {
 	    	self.json[cat] = json!({"entries": [new_entry(body, 0, (self.get_timestamp_fn)())]});
 	    }
 	    else {
 	    	let entries_ref = self.json[cat]["entries"].as_array_mut().unwrap();
-	    	let id = entries_ref.len();
-	    	entries_ref.push(new_entry(body, id, (self.get_timestamp_fn)()));
+	    	the_id = entries_ref.len();
+	    	entries_ref.push(new_entry(body, the_id, (self.get_timestamp_fn)()));
 	    }
+	    the_id as i64
 	}
 
 	pub fn replace_entry(&mut self, cat: &str, id: usize, new_body: &str) {
@@ -43,8 +45,6 @@ fn new_entry(body: &str, id: usize, created_ts: i64) -> serde_json::Value {
 fn updated_entry(body: &str, id: usize, created_ts: i64, updated_ts: i64) -> serde_json::Value {
 	json!({"body": body, "id": id, "created_ts": created_ts, "updated_ts": updated_ts})
 } 
-
-
 
 fn get_timestamp() -> i64 {
 	let now: DateTime<Local> = Local::now();

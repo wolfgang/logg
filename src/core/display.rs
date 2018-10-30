@@ -40,10 +40,10 @@ pub fn show_entry_for_search_result(result: &json_filter::SearchResult, index: u
 	println!("{}\n{}\n{}", LINE, body_as_str, LINE);					
 }
 
+pub fn pretty_id<'a>(id: i64) -> ColoredString {
+	format!("[{}]", id).yellow()
+}
 fn pretty_count(count: usize) -> ColoredString {
 	format!("({})", count).yellow()
 }
 
-fn pretty_id<'a>(id: i64) -> ColoredString {
-	format!("[{}]", id).yellow()
-}

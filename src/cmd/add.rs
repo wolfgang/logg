@@ -1,6 +1,8 @@
 use core::error::*;
 use core::io;
 use cmd::utils;
+use core::display;
+use colored::*;
 
 pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
     let mut db = utils::create_db_from_log();
@@ -12,8 +14,9 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
     let cat = args[0].clone();
     let body = get_body(args)?;
 
-    db.add_entry(&cat, &body);
+    let new_id = db.add_entry(&cat, &body);
     io::write_log(&db.json);
+    println!("Added {} {}", cat.green(), display::pretty_id(new_id));
     Ok(())
 }
 
