@@ -99,7 +99,7 @@ mod test {
 			db.json);
 	}
 	#[test]
-	fn replace_entry() {
+	fn replace_entry_replaces_entry_with_given_id_with_given_bidy() {
 		let mut db =_db(json!({
 			"category_1": {"entries": [_body("body_1", 0), _body("body_2", 1)]}}));
 		db.replace_entry("category_1", 0, "body_1_replaced");
@@ -114,4 +114,15 @@ mod test {
 				"category_1": {"entries": [_body("body_1_replaced", 0), _body("body_2_replaced", 1)]}}),
 			db.json);
 	}
+
+	#[test]
+	fn add_entry_returns_id_of_just_added_entry() {
+    	let mut db = _db(json!({}));
+		assert_eq!(0, db.add_entry("cat1", "body"));		
+		assert_eq!(1, db.add_entry("cat1", "body"));		
+		assert_eq!(0, db.add_entry("cat2", "body"));		
+		assert_eq!(1, db.add_entry("cat2", "body"));		
+	}
+
+
 }
