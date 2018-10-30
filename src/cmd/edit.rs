@@ -6,7 +6,7 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let db = utils::create_db_from_log();
 
 	if args.len() < 4 {
-		return simple_error("Edit command expected category and id".into());
+		return simple_error("Edit command expects category and id".into());
 	}
 
 	let result = utils::get_requested_category(args, &db)?;
@@ -15,7 +15,7 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 
 	let original_body = result.get_body_by_id(id);
 	let edited_body = get_edited_body(&original_body)?;
-	
+
 	if edited_body == original_body {
 		return simple_error("No change was made".into());
 	}
