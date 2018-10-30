@@ -3,7 +3,7 @@ use core::io;
 use cmd::utils;
 
 pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
-	let db = utils::create_db_from_log();
+	let mut db = utils::create_db_from_log();
 
 	if args.len() < 4 {
 		return simple_error("Edit command expects category and id".into());
@@ -20,8 +20,6 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 		return simple_error("No change was made".into());
 	}
 	
-	let mut db = utils::create_db_from_log();
-
 	db.replace_entry(&result.category, id, &edited_body);
 	io::write_log(&db.json);
 

@@ -14,7 +14,12 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
 
 	if args.len()==4 {
 		let id = utils::parse_requested_id(args)?;
-		show_search_result_entry_with_id(&result, id)?
+		show_search_result_entry_with_id(&result, id)?;
+		return Ok(());
+	}
+	
+	if result.is_unqiue() {
+		display::show_entry_for_search_result(&result, 0);
 	}
 	else {
 		display::show_toc_for_search_result(&result);
