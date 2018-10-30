@@ -11,7 +11,7 @@ fn main() -> std::io::Result<()> {
 	let args: Vec<String> = env::args().collect();
 
 	if args.len()==1 {
-		error::print("No command specified (add/find/show)".into());
+		error::print("No command specified (add/edit/find/show)".into());
 		process::exit(1);
 	}
 
