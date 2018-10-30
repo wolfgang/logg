@@ -13,7 +13,12 @@ pub (super) fn execute(args: &[String]) -> EmptyBoxedResult {
 	let id = utils::parse_requested_id(args)?;
 	utils::check_is_valid_id(id, &result)?;
 
-	let edited_body = get_edited_body(result.get_body_by_id(id))?;
+	let original_body = result.get_body_by_id(id);
+	let edited_body = get_edited_body(&original_body)?;
+	
+	if edited_body == original_body {
+		return simple_error("No change was made".into());
+	}
 	
 	let mut db = utils::create_db_from_log();
 
