@@ -49,26 +49,26 @@ impl<'a> Filter for JsonDB<'a> {
 }
 
 fn by_body(search_str: &str, json: &serde_json::Value) -> Vec<SearchResult> {
-	let obj = json.as_object().unwrap();
+    let obj = json.as_object().unwrap();
     let mut  search_results = Vec::new();
     let search_str_lowercase = search_str.to_lowercase();
 
-	for cat_name in obj.keys() {
-		let entries = &obj[cat_name]["entries"];
+    for cat_name in obj.keys() {
+        let entries = &obj[cat_name]["entries"];
         let mut sr = SearchResult::new(cat_name.clone());
 
-		for entry in entries.as_array().unwrap() {
+        for entry in entries.as_array().unwrap() {
             let body = entry["body"].as_str().unwrap().to_lowercase();
             if body.contains(&search_str_lowercase) {                
                 sr.add(entry)
             }
-		}
+        }
 
         if sr.has_entries() {
             search_results.push(sr);
         }
-	}
-    search_results	
+    }
+    search_results    
 }
 
 fn by_category(category: &str, json: &serde_json::Value) -> SearchResult {
@@ -91,7 +91,7 @@ fn by_category(category: &str, json: &serde_json::Value) -> SearchResult {
 
 #[cfg(test)]
 mod test {
-	use super::*;
+    use super::*;
 
     #[test]
     fn by_category_returns_category() {
@@ -147,7 +147,7 @@ mod test {
 
     #[test]
     fn return_full_input_if_search_is_empty_string() {        
-    	let json = json!(
+        let json = json!(
             {
                 "cat1": {"entries": [{"body": "some body 1"}]},
                 "cat2": {
@@ -156,8 +156,8 @@ mod test {
                         {"body": "some body 3"}
                 ]}
             });
-    	let results = by_body("", &json);
-    	assert_eq!(2, results.len());
+        let results = by_body("", &json);
+        assert_eq!(2, results.len());
 
         assert_result_in(&results, 0, "cat1", vec!(entry_with_body("some body 1")));
         assert_result_in(
