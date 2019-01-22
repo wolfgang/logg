@@ -4,10 +4,10 @@ version = "0.1.0"
 authors = ["wolfgang <wolfgang@wolfgangdeutsch.work>"]
 
 [dev-dependencies]
-pretty_assertions = "0.5.1"
+pretty_assertions = "^0.5.1"
 
 [dependencies]
-serde_json = "1.0"
-colored = "1.6"
-chrono = "0.4"
+serde_json = "^1.0"
+colored = "^1.6"
+chrono = "^0.4"
 
