@@ -8,7 +8,7 @@ use core;
 
 
 pub fn init_log() {
-    if !Path::new(&get_home_dir()).exists() {
+    if env::var("LOGG_FILE").is_err() && !Path::new(&get_home_dir()).exists() {
         DirBuilder::new()
             .recursive(false)
             .create(get_home_dir()).expect("Failed to create home dir");
