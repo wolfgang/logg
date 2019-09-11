@@ -51,8 +51,13 @@ fn get_log_file() -> String {
 }
 
 fn get_home_dir() -> String {
-    let home = env::var("HOME").unwrap();
-    format!("{}/{}", home, core::LOGG_HOME)
+    match env::var("LOGG_FILE") {
+        Ok(val) => val,
+        Err(_) => {
+            let home = env::var("HOME").unwrap();
+            format!("{}/{}", home, core::LOGG_HOME)
+        }
+    }
 }
 
 

@@ -15,6 +15,8 @@ fn main() -> std::io::Result<()> {
         process::exit(1);
     }
 
+    let log_file = logg::core::LOG_FILE;
+
     let cmd = &args[1];
 
     let result = match cmd as &str {
