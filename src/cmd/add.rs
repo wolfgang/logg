@@ -8,7 +8,7 @@ pub(super) fn execute(args: &[String]) -> EmptyBoxedResult {
     let mut db = utils::create_db_from_log();
 
     if args.len() == 0 {
-        return simple_error("Please specifiy a category".into())
+        return simple_error("Please specify a category".into())
     }
 
     let cat = args[0].clone();
